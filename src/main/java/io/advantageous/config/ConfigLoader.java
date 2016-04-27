@@ -22,6 +22,17 @@ public class ConfigLoader {
         throw new IllegalStateException("this class is not to be instantiated.");
     }
 
+
+    /**
+     * Works with any nested structure of maps and lists and basic Java types.
+     * Works with Pojos, Maps, Lists.
+     * @param rootOfConfig rootConfig object
+     * @return Config version of object map.
+     */
+    public static Config loadFromObject(final Object rootOfConfig) {
+        return new ConfigFromObject(rootOfConfig);
+    }
+
     /**
      * Loads a config file.
      * @param path file path to config
@@ -37,7 +48,7 @@ public class ConfigLoader {
         } catch (ScriptException e) {
             throw new IllegalArgumentException("unable to execute javascript.", e);
         }
-        return new ConfigImpl(engine.get("config"));
+        return loadFromObject(engine.get("config"));
     }
 
 }

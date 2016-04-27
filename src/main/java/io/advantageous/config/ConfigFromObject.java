@@ -13,15 +13,17 @@ import java.util.stream.Collectors;
 import static io.advantageous.boon.core.reflection.BeanUtils.findProperty;
 
 /**
+ * Turns any Map or Java Object into config.
+ * Works with any Java Object tree and or any Nashorn ScriptObjectMirror tree.
  * @author Rick Hightower
  * @author Geoff Chandler
  */
-class ConfigImpl implements Config {
+class ConfigFromObject implements Config {
 
     private final Object root;
     private final Mapper mapper = new MapperSimple();
 
-    <T> ConfigImpl(T object) {
+    <T> ConfigFromObject(T object) {
         this.root = object;
     }
 
@@ -85,7 +87,7 @@ class ConfigImpl implements Config {
     @Override
     public Config getConfig(String path) {
         validatePath(path);
-        return new ConfigImpl(getMap(path));
+        return new ConfigFromObject(getMap(path));
     }
 
     @Override
@@ -103,7 +105,7 @@ class ConfigImpl implements Config {
             throw new IllegalArgumentException("List must contain config maps only");
         }
         return list.stream().map(o -> (Map<String, Object>) o)
-                .map(ConfigImpl::new)
+                .map(ConfigFromObject::new)
                 .collect(Collectors.toList());
 
     }
@@ -156,7 +158,7 @@ class ConfigImpl implements Config {
 
     @Override
     public String toString() {
-        return "ConfigImpl{" +
+        return "ConfigFromObject{" +
                 "root=" + root +
                 '}';
     }

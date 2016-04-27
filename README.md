@@ -2,17 +2,19 @@
 
 # Konf - Typed Java Config system 
 Java configuration library similar in concept to TypeSafe but uses full 
-JavaScript for configuration.
+JavaScript, YAML or JSON for configuration.
 
-Uses JavaScript/JSON as config for Java. 
+Uses JavaScript/JSON/YAML as config for Java. 
 
-You can use full JavaScript for configuration.
+You can use full JavaScript for configuration as long as you define a
+variable called `config` that results in a JavaScript object which
+equates to a Java map.
 
 ## Using Konf on your project
 
 Konf is in the [public maven repo](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.advantageous.konf%22).
 
-### Using Konf from maven
+### Using konf from maven
 ```xml
 <dependency>
     <groupId>io.advantageous.konf</groupId>
@@ -21,22 +23,25 @@ Konf is in the [public maven repo](http://search.maven.org/#search%7Cga%7C1%7Cg%
 </dependency>
 ```
 
-### Using Konf from gradle
+### Using konf from gradle
 ```java
 compile 'io.advantageous.konf:konf:1.0.0.RC1'
 ```
 
-### Using Konf from scala sbt
+### Using konf from scala sbt
 ```java
 libraryDependencies += "io.advantageous.konf" % "konf" % "1.0.0.RC1"
 ```
 
-### Using Konf from Clojure Leiningen
+### Using konf from clojure leiningen
 ```lisp
 [io.advantageous.konf/konf "1.0.0.RC1"]
 ```
 
+Here is an example config for JavaScript. 
 
+Konf expects the conf variable to be set to a JavaScript object with 
+properties.
 
 #### JavaScript based configuration for Java
 ```javascript
@@ -53,6 +58,23 @@ var config = {
 
 ```
 
+The interface for Konf is Config.
+You can get a sub Config from Config (`getConfig(path)`).
+The `path` is always in dot notation (`this.that.foo.bar`).
+You can also use:
+* `getInt(path)` 
+* `getLong(path)`
+* `getDouble(path)`
+* `getString(path)`
+* `getStringList(path)` gets a list of strings
+* `getConfig(path)` gets a sub-config.
+* `getMap(path)` gets a map which is a sub-config.
+* `getConfigList(path)` gets a list of configs at the location specified.
+
+`getMap` works with JavaScript objects. `getStringList` and `getConfigList` works
+with JavaScript array of string and a JavaScript array of JavaScript objects. 
+
+Here is the full interface.
 
 #### Config interface
 ```java
@@ -135,6 +157,8 @@ var config = {
 
 ```
 
+We can do the following operations. 
+
 First we load the config.
 
 #### Loading the config.
@@ -151,7 +175,7 @@ First we load the config.
 
 Then we show reading basic types with the `config` object using `getX`.
 
-#### Reading basic types
+#### Reading basic types from config
 
 ```java
     @Test
@@ -192,7 +216,7 @@ Then we show reading basic types with the `config` object using `getX`.
 
 You can work with nested properties as well.
 
-#### Reading a nested config
+#### Reading a nested config from the config
 
 ```java
     @Test
@@ -215,7 +239,7 @@ You can work with nested properties as well.
 You can read deeply nested config items as well by specifying the 
 property path using dot notation. 
     
-#### Reading nested properties with dot notation
+#### Reading nested properties with dot notation from config
 
 
 ```java
@@ -267,3 +291,68 @@ You can also read a list of config objects out of the config as well.
         assertEquals("123", employees.get(0).getString("id"));
     }
  ```
+ 
+ ## Using Config with YAML
+ 
+ First include a YAML to object parser like [YAML Beans](https://github.com/EsotericSoftware/yamlbeans)
+ or a library like this.
+ 
+ #### Example YAML
+ ```yaml
+   name: Nathan Sweet
+     age: 28
+     address: 4011 16th Ave S
+     phone numbers:
+      - name: Home
+        number: 206-555-5138
+      - name: Work
+        number: 425-555-2306
+ ```
+ 
+#### Using Konf with YAML
+ 
+```java
+
+//Use YamlReader to load YAML file.
+YamlReader reader = new YamlReader(new FileReader("contact.yml"));
+
+//Convert object read from YAML into Konf config
+Config config = ConfigLoader.loadFromObject(reader.read());
+
+//Now you have strongly typed access to fields
+String address = config.getString("address");
+```
+
+You can also read Pojos from anywhere in the YAML file as well as 
+sub configs. 
+
+
+## You can also use Konf with JSON using Boon
+
+See [Boon](https://github.com/advantageous/boon) JSON parser project,
+and [Boon in five minutes](https://github.com/boonproject/boon/wiki/Boon-JSON-in-five-minutes)
+
+#### Using Konf with JSON
+
+```java
+ObjectMapper mapper =  JsonFactory.create();
+
+
+/* Convert object read from YAML into Konf config.
+  'src' can be File, InputStream, Reader, String. */
+Config config = ConfigLoader.loadFromObject(mapper.fromJson(src));
+
+
+//Now you have strongly typed access to fields
+String address = config.getString("address");
+
+```
+
+Boon supports LAX JSON (Json with comments, and you do not need to quote
+the field).
+
+
+If you like our configuration project, please try our 
+[Reactive Java project](https://github.com/advantageous/reakt)
+or our [Actor based microservices lib](https://github.com/advantageous/qbit).
+

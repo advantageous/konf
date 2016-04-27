@@ -41,7 +41,7 @@ public class ConfigImplTest {
                         map("id", 789, "name", "Paul")
                 )
         );
-        config = new ConfigImpl(map);
+        config = new ConfigFromObject(map);
     }
 
     @Test
