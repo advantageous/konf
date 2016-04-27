@@ -3,6 +3,7 @@ package io.advantageous.config;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class ConfigImplTest {
                         "int2", 2,
                         "float2", 2.0
                 ),
+                "uri", URI.create("http://localhost:8080/foo"),
                 "employee", map("id", 123, "name", "Geoff"),
                 "employees", asList(
                         map("id", 123, "name", "Geoff"),
@@ -43,6 +45,7 @@ public class ConfigImplTest {
     @Test
     public void testSimple() throws Exception {
 
+        assertEquals(URI.create("http://localhost:8080/foo"), config.get("uri", URI.class));
         assertEquals(1, config.getInt("int1"));
         assertEquals(asList("Foo", "Bar"), config.getStringList("stringList"));
         assertEquals("rick", config.getString("string1"));

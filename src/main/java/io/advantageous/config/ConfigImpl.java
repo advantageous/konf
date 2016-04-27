@@ -1,5 +1,6 @@
 package io.advantageous.config;
 
+import io.advantageous.boon.core.Conversions;
 import io.advantageous.boon.core.reflection.Mapper;
 import io.advantageous.boon.core.reflection.MapperSimple;
 
@@ -84,9 +85,11 @@ public class ConfigImpl implements Config {
 
         if (type.isAssignableFrom(value.getClass())) {
             return (T) value;
-        } else {
+        } else if (value instanceof Map){
             final Map<String, Object> map = getMap(path);
             return mapper.fromMap(map, type);
+        } else {
+            return Conversions.coerce(type, value);
         }
     }
 
