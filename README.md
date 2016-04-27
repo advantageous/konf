@@ -1,10 +1,41 @@
-# Konf - Typed Java config system 
+[Konf Website](http://advantageous.github.io/konf/)
+
+# Konf - Typed Java Config system 
 Java configuration library similar in concept to TypeSafe but uses full 
 JavaScript for configuration.
 
 Uses JavaScript/JSON as config for Java. 
 
 You can use full JavaScript for configuration.
+
+## Using Konf on your project
+
+Konf is in the [public maven repo](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.advantageous.konf%22).
+
+### Using Konf from maven
+```xml
+<dependency>
+    <groupId>io.advantageous.konf</groupId>
+    <artifactId>konf</artifactId>
+    <version>1.0.0.RC1</version>
+</dependency>
+```
+
+### Using Konf from gradle
+```java
+compile 'io.advantageous.konf:konf:1.0.0.RC1'
+```
+
+### Using Konf from scala sbt
+```java
+libraryDependencies += "io.advantageous.konf" % "konf" % "1.0.0.RC1"
+```
+
+### Using Konf from Clojure Leiningen
+```lisp
+[io.advantageous.konf/konf "1.0.0.RC1"]
+```
+
 
 
 #### JavaScript based configuration for Java
