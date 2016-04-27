@@ -30,7 +30,7 @@ public class JsLoader {
             engine.eval(new InputStreamReader(
                     currentThread().getContextClassLoader().getResourceAsStream(path)));
         } catch (ScriptException e) {
-            throw new IllegalArgumentException("unable to load javascript config at path: " + path);
+            throw new IllegalArgumentException("unable to execute javascript.", e);
         }
         return new ConfigImpl(engine.get("config"));
     }

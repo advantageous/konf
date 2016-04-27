@@ -31,4 +31,9 @@ public class JsLoaderTest {
         Assert.assertNotNull(myMap);
         Assert.assertEquals(234, myMap.get("nestedKey"));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testBadJs()throws Exception {
+        JsLoader.load("bad-config.js");
+    }
 }
