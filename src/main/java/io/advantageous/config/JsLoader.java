@@ -24,7 +24,7 @@ public class JsLoader {
     public static Config load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
-            engine.eval(new InputStreamReader(JsLoader.class.getClassLoader().getResourceAsStream("config-utils.js")));
+            engine.eval(new InputStreamReader(JsLoader.class.getClassLoader().getResourceAsStream("jjs-config-utils.js")));
             engine.eval(new InputStreamReader(currentThread().getContextClassLoader().getResourceAsStream(path)));
         } catch (ScriptException e) {
             throw new IllegalArgumentException("unable to load javascript config at path: " + path);
