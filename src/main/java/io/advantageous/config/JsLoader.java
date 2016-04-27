@@ -4,7 +4,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.InputStreamReader;
-import java.io.Reader;
+
+import static java.lang.Thread.currentThread;
 
 /**
  * Javascript configuration loader.
@@ -23,14 +24,8 @@ public class JsLoader {
     public static Config load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
-            final Reader utilsReader =
-                    new InputStreamReader(JsLoader.class.getClassLoader().getResourceAsStream("config-utils.js"));
-            engine.eval(utilsReader);
-
-            final Reader configReader =
-                    new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(path));
-            engine.eval(configReader);
-
+            engine.eval(new InputStreamReader(JsLoader.class.getClassLoader().getResourceAsStream("config-utils.js")));
+            engine.eval(new InputStreamReader(currentThread().getContextClassLoader().getResourceAsStream(path)));
         } catch (ScriptException e) {
             throw new IllegalArgumentException("unable to load javascript config at path: " + path);
         }
