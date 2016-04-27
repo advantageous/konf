@@ -14,10 +14,6 @@ public class ConfigImpl implements Config {
     private final Object root;
     private final Mapper mapper = new MapperSimple();
 
-    public ConfigImpl(Map<String, Object> map) {
-        this.root = map;
-    }
-
     public <T> ConfigImpl(T object) {
         this.root = object;
     }
