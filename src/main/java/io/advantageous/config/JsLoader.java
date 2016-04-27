@@ -24,8 +24,7 @@ public class JsLoader {
         throw new IllegalStateException("this class is not to be instantiated.");
     }
 
-    //TODO: make this return a config object
-    public static Object load(final String path) {
+    public static Config load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
             engine.eval(new FileReader(get(getSystemResource("classpath:config-utils.js").toURI()).toString()));
@@ -33,7 +32,7 @@ public class JsLoader {
         } catch (ScriptException | FileNotFoundException | URISyntaxException e) {
             throw new IllegalArgumentException("unable to load javascript config at path: " + path);
         }
-        return engine.get("config");
+        return new ConfigImpl(engine.get("config"));
     }
 
 }

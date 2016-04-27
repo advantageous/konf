@@ -17,4 +17,6 @@ public interface Config {
     Map<String, Object> getMap(String path);
     Config getConfig(String path);
     <T> T get(String path, Class<T> type);
+    <T> List<T> getList(String path, Class<T> componentType);
+
 }
