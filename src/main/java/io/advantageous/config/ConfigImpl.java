@@ -80,8 +80,14 @@ public class ConfigImpl implements Config {
     @Override
     public <T> T get(String path, Class<T> type) {
         validatePath(path);
-        final Map<String, Object> map = getMap(path);
-        return mapper.fromMap(map, type);
+        final Object value = findProperty(root, path);
+
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T) value;
+        } else {
+            final Map<String, Object> map = getMap(path);
+            return mapper.fromMap(map, type);
+        }
     }
 
     @Override
