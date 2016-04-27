@@ -12,6 +12,7 @@ import static java.lang.Thread.currentThread;
  *
  * @author Geoff Chandler <geoffc@gmail.com>
  */
+@SuppressWarnings("WeakerAccess")
 public class JsLoader {
 
     /**
@@ -24,8 +25,10 @@ public class JsLoader {
     public static Config load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
-            engine.eval(new InputStreamReader(JsLoader.class.getClassLoader().getResourceAsStream("jjs-config-utils.js")));
-            engine.eval(new InputStreamReader(currentThread().getContextClassLoader().getResourceAsStream(path)));
+            engine.eval(new InputStreamReader(
+                    JsLoader.class.getClassLoader().getResourceAsStream("jjs-config-utils.js")));
+            engine.eval(new InputStreamReader(
+                    currentThread().getContextClassLoader().getResourceAsStream(path)));
         } catch (ScriptException e) {
             throw new IllegalArgumentException("unable to load javascript config at path: " + path);
         }
