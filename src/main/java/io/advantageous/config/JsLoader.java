@@ -23,7 +23,7 @@ public class JsLoader {
     }
 
     //TODO: make this return a config object
-    static Object load(final String path) {
+    public static Object load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
             engine.eval(new FileReader(Paths.get(ClassLoader.getSystemResource(path).toURI()).toString()));
