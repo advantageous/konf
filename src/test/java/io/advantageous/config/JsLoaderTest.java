@@ -33,7 +33,7 @@ public class JsLoaderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testBadJs()throws Exception {
+    public void testBadJs() throws Exception {
         JsLoader.load("bad-config.js");
     }
 }
