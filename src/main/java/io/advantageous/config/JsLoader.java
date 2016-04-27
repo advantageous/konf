@@ -6,7 +6,9 @@ import javax.script.ScriptException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
+
+import static java.lang.ClassLoader.getSystemResource;
+import static java.nio.file.Paths.get;
 
 /**
  * Javascript configuration loader.
@@ -26,7 +28,8 @@ public class JsLoader {
     public static Object load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
-            engine.eval(new FileReader(Paths.get(ClassLoader.getSystemResource(path).toURI()).toString()));
+            engine.eval(new FileReader(get(getSystemResource("classpath:config-utils.js").toURI()).toString()));
+            engine.eval(new FileReader(get(getSystemResource(path).toURI()).toString()));
         } catch (ScriptException | FileNotFoundException | URISyntaxException e) {
             throw new IllegalArgumentException("unable to load javascript config at path: " + path);
         }
