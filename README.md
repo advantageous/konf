@@ -1,4 +1,4 @@
-# Konfig
+# Konf - Typed Java config system 
 Java configuration library similar in concept to TypeSafe but uses full 
 JavaScript for configuration.
 
