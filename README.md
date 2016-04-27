@@ -25,17 +25,9 @@ var config = {
 
 #### Config interface
 ```java
-package io.advantageous.config;
-
-import java.util.List;
-import java.util.Map;
-
-/**
- * Configuration Interface
- */
 public interface Config {
 
-    /**  Get string at location. /
+    /** Get string at location. */
     String getString(String path);
 
     /** Checks to see if config has the path specified. */
@@ -44,7 +36,7 @@ public interface Config {
     /** Get int at location. */
     int getInt(String path);
 
-    /**  Get float at location. */
+    /** Get float at location. */
     float getFloat(String path);
 
     /** Get double at location. */
@@ -53,41 +45,23 @@ public interface Config {
     /** Get long at location. */
     long getLong(String path);
 
-    /**
-     * Get list of strings at location
-     */
+    /** Get list of strings at location. */
     List<String> getStringList(String path);
 
-
-    /**
-     * Get map at location
-     */
+    /** Get map at location. */
     Map<String, Object> getMap(String path);
 
-    /**
-     * Get a sub-config at location.
-     */
+    /** Get a sub-config at location. */
     Config getConfig(String path);
 
-
-    /**
-     * Get list of sub-configs at location.
-     *
-     * @param path path to config
-     * @return Config at location
-     */
+    /** Get list of sub-configs at location. */
     List<Config> getConfigList(String path);
 
-    /**
-     * Get a single POJO.
-     */
+    /**  Get a single POJO out of config at path. */
     <T> T get(String path, Class<T> type);
 
-    /**
-     * Get a list of POJOs.
-     */
+    /**  Get a list of POJOs. */
     <T> List<T> getList(String path, Class<T> componentType);
-
 }
 
 ```
