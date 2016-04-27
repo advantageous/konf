@@ -30,15 +30,53 @@
 
       </header>
       <section>
-        <h1>
-<a id="konf---typed-java-config-system" class="anchor" href="#konf---typed-java-config-system" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Konf - Typed Java config system</h1>
+        <p><a href="http://advantageous.github.io/konf/">Konf Website</a></p>
 
-<p>Java configuration library similar in concept to TypeSafe but uses full 
-JavaScript for configuration.</p>
+<h1>
+<a id="konf---typed-java-config-system" class="anchor" href="#konf---typed-java-config-system" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Konf - Typed Java Config system</h1>
 
-<p>Uses JavaScript/JSON as config for Java. </p>
+<p>Java configuration library similar in concept to TypeSafe config,
+but uses full JavaScript, YAML or JSON for configuration.</p>
 
-<p>You can use full JavaScript for configuration.</p>
+<p>Uses JavaScript/JSON/YAML as config for Java. </p>
+
+<p>You can use full JavaScript for configuration as long as you define a
+variable called <code>config</code> that results in a JavaScript object which
+equates to a Java map.</p>
+
+<h2>
+<a id="using-konf-on-your-project" class="anchor" href="#using-konf-on-your-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Konf on your project</h2>
+
+<p>Konf is in the <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.advantageous.konf%22">public maven repo</a>.</p>
+
+<h3>
+<a id="using-konf-from-maven" class="anchor" href="#using-konf-from-maven" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using konf from maven</h3>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.advantageous.konf&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;konf&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;1.0.0.RC1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<h3>
+<a id="using-konf-from-gradle" class="anchor" href="#using-konf-from-gradle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using konf from gradle</h3>
+
+<div class="highlight highlight-source-java"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>io.advantageous.konf:konf:1.0.0.RC1<span class="pl-pds">'</span></span></pre></div>
+
+<h3>
+<a id="using-konf-from-scala-sbt" class="anchor" href="#using-konf-from-scala-sbt" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using konf from scala sbt</h3>
+
+<div class="highlight highlight-source-java"><pre>libraryDependencies <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>io.advantageous.konf<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>konf<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>1.0.0.RC1<span class="pl-pds">"</span></span></pre></div>
+
+<h3>
+<a id="using-konf-from-clojure-leiningen" class="anchor" href="#using-konf-from-clojure-leiningen" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using konf from clojure leiningen</h3>
+
+<div class="highlight highlight-source-lisp"><pre>[io.advantageous.konf/konf <span class="pl-s"><span class="pl-pds">"</span>1.0.0.RC1<span class="pl-pds">"</span></span>]</pre></div>
+
+<p>Here is an example config for JavaScript. </p>
+
+<p>Konf expects the conf variable to be set to a JavaScript object with 
+properties.</p>
 
 <h4>
 <a id="javascript-based-configuration-for-java" class="anchor" href="#javascript-based-configuration-for-java" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JavaScript based configuration for Java</h4>
@@ -54,6 +92,35 @@ JavaScript for configuration.</p>
 
 };
 </pre></div>
+
+<p>The interface for Konf is Config.
+You can get a sub Config from Config (<code>getConfig(path)</code>).
+The <code>path</code> is always in dot notation (<code>this.that.foo.bar</code>).
+You can also use:</p>
+
+<ul>
+<li>
+<code>getInt(path)</code> </li>
+<li><code>getLong(path)</code></li>
+<li><code>getDouble(path)</code></li>
+<li><code>getString(path)</code></li>
+<li>
+<code>getStringList(path)</code> gets a list of strings</li>
+<li>
+<code>getConfig(path)</code> gets a sub-config.</li>
+<li>
+<code>getMap(path)</code> gets a map which is a sub-config.</li>
+<li>
+<code>getConfigList(path)</code> gets a list of configs at the location specified.</li>
+</ul>
+
+<p><code>getMap</code> works with JavaScript objects. <code>getStringList</code> and <code>getConfigList</code> works
+with JavaScript array of string and a JavaScript array of JavaScript objects. </p>
+
+<p>Not you get an exception if the <code>path</code> requested is not found. 
+Use <code>hasPath(path)</code> if you think the config path might be missing. </p>
+
+<p>Here is the full interface.</p>
 
 <h4>
 <a id="config-interface" class="anchor" href="#config-interface" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Config interface</h4>
@@ -134,6 +201,8 @@ JavaScript for configuration.</p>
 };
 </pre></div>
 
+<p>We can do the following operations. </p>
+
 <p>First we load the config.</p>
 
 <h4>
@@ -150,7 +219,7 @@ JavaScript for configuration.</p>
 <p>Then we show reading basic types with the <code>config</code> object using <code>getX</code>.</p>
 
 <h4>
-<a id="reading-basic-types" class="anchor" href="#reading-basic-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading basic types</h4>
+<a id="reading-basic-types-from-config" class="anchor" href="#reading-basic-types-from-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading basic types from config</h4>
 
 <div class="highlight highlight-source-java"><pre>    @<span class="pl-smi">Test</span>
     <span class="pl-k">public</span> <span class="pl-k">void</span> testSimple() throws <span class="pl-smi">Exception</span> {
@@ -190,7 +259,7 @@ JavaScript for configuration.</p>
 <p>You can work with nested properties as well.</p>
 
 <h4>
-<a id="reading-a-nested-config" class="anchor" href="#reading-a-nested-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading a nested config</h4>
+<a id="reading-a-nested-config-from-the-config" class="anchor" href="#reading-a-nested-config-from-the-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading a nested config from the config</h4>
 
 <div class="highlight highlight-source-java"><pre>    @<span class="pl-smi">Test</span>
     <span class="pl-k">public</span> <span class="pl-k">void</span> testGetConfig() throws <span class="pl-smi">Exception</span> {
@@ -212,7 +281,7 @@ JavaScript for configuration.</p>
 property path using dot notation. </p>
 
 <h4>
-<a id="reading-nested-properties-with-dot-notation" class="anchor" href="#reading-nested-properties-with-dot-notation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading nested properties with dot notation</h4>
+<a id="reading-nested-properties-with-dot-notation-from-config" class="anchor" href="#reading-nested-properties-with-dot-notation-from-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading nested properties with dot notation from config</h4>
 
 <div class="highlight highlight-source-java"><pre>    @<span class="pl-smi">Test</span>
     <span class="pl-k">public</span> <span class="pl-k">void</span> testSimplePath() throws <span class="pl-smi">Exception</span> {
@@ -262,6 +331,66 @@ property path using dot notation. </p>
         assertEquals(<span class="pl-s"><span class="pl-pds">"</span>Geoff<span class="pl-pds">"</span></span>, employees<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>));
         assertEquals(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>, employees<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>));
     }</pre></div>
+
+<p>## Using Config with YAML</p>
+
+<p>First include a YAML to object parser like <a href="https://github.com/EsotericSoftware/yamlbeans">YAML Beans</a>
+ or a library like this.</p>
+
+<p>#### Example YAML</p>
+
+<div class="highlight highlight-source-yaml"><pre>   <span class="pl-s"><span class="pl-ent">name:</span> <span class="pl-s">Nathan Sweet</span></span>
+     <span class="pl-c1"><span class="pl-ent">age:</span> 28</span>
+     <span class="pl-s"><span class="pl-ent">address:</span> <span class="pl-s">4011 16th Ave S</span></span>
+     <span class="pl-s"><span class="pl-ent">phone numbers:</span></span>
+      <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">Home</span></span>
+        <span class="pl-s"><span class="pl-ent">number:</span> <span class="pl-s">206-555-5138</span></span>
+      <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">Work</span></span>
+        <span class="pl-s"><span class="pl-ent">number:</span> <span class="pl-s">425-555-2306</span></span></pre></div>
+
+<h4>
+<a id="using-konf-with-yaml" class="anchor" href="#using-konf-with-yaml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Konf with YAML</h4>
+
+<div class="highlight highlight-source-java"><pre>
+<span class="pl-c">//Use YamlReader to load YAML file.</span>
+<span class="pl-smi">YamlReader</span> reader <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">YamlReader</span>(<span class="pl-k">new</span> <span class="pl-smi">FileReader</span>(<span class="pl-s"><span class="pl-pds">"</span>contact.yml<span class="pl-pds">"</span></span>));
+
+<span class="pl-c">//Convert object read from YAML into Konf config</span>
+<span class="pl-smi">Config</span> config <span class="pl-k">=</span> <span class="pl-smi">ConfigLoader</span><span class="pl-k">.</span>loadFromObject(reader<span class="pl-k">.</span>read());
+
+<span class="pl-c">//Now you have strongly typed access to fields</span>
+<span class="pl-smi">String</span> address <span class="pl-k">=</span> config<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>address<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>You can also read Pojos from anywhere in the YAML file as well as 
+sub configs. </p>
+
+<h2>
+<a id="you-can-also-use-konf-with-json-using-boon" class="anchor" href="#you-can-also-use-konf-with-json-using-boon" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>You can also use Konf with JSON using Boon</h2>
+
+<p>See <a href="https://github.com/advantageous/boon">Boon</a> JSON parser project,
+and <a href="https://github.com/boonproject/boon/wiki/Boon-JSON-in-five-minutes">Boon in five minutes</a></p>
+
+<h4>
+<a id="using-konf-with-json" class="anchor" href="#using-konf-with-json" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Konf with JSON</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">ObjectMapper</span> mapper <span class="pl-k">=</span>  <span class="pl-smi">JsonFactory</span><span class="pl-k">.</span>create();
+
+
+<span class="pl-c">/* Convert object read from YAML into Konf config.</span>
+<span class="pl-c">  'src' can be File, InputStream, Reader, String. */</span>
+<span class="pl-smi">Config</span> config <span class="pl-k">=</span> <span class="pl-smi">ConfigLoader</span><span class="pl-k">.</span>loadFromObject(mapper<span class="pl-k">.</span>fromJson(src));
+
+
+<span class="pl-c">//Now you have strongly typed access to fields</span>
+<span class="pl-smi">String</span> address <span class="pl-k">=</span> config<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>address<span class="pl-pds">"</span></span>);
+</pre></div>
+
+<p>Boon supports LAX JSON (Json with comments, and you do not need to quote
+the field).</p>
+
+<p>If you like our configuration project, please try our 
+<a href="https://github.com/advantageous/reakt">Reactive Java project</a>
+or our <a href="https://github.com/advantageous/qbit">Actor based microservices lib</a>.</p>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
