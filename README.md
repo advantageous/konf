@@ -1,8 +1,8 @@
 [Konf Website](http://advantageous.github.io/konf/)
 
 # Konf - Typed Java Config system 
-Java configuration library similar in concept to TypeSafe but uses full 
-JavaScript, YAML or JSON for configuration.
+Java configuration library similar in concept to TypeSafe config,
+but uses full JavaScript, YAML or JSON for configuration.
 
 Uses JavaScript/JSON/YAML as config for Java. 
 
@@ -73,6 +73,9 @@ You can also use:
 
 `getMap` works with JavaScript objects. `getStringList` and `getConfigList` works
 with JavaScript array of string and a JavaScript array of JavaScript objects. 
+
+Not you get an exception if the `path` requested is not found. 
+Use `hasPath(path)` if you think the config path might be missing. 
 
 Here is the full interface.
 
