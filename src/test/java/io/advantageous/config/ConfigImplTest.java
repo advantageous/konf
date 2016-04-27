@@ -32,6 +32,8 @@ public class ConfigImplTest {
                         "float2", 2.0
                 ),
                 "uri", URI.create("http://localhost:8080/foo"),
+                "myClass", "java.lang.Object",
+                "myURI", "http://localhost:8080/foo",
                 "employee", map("id", 123, "name", "Geoff"),
                 "employees", asList(
                         map("id", 123, "name", "Geoff"),
@@ -45,7 +47,10 @@ public class ConfigImplTest {
     @Test
     public void testSimple() throws Exception {
 
+
+        assertEquals(Object.class, config.get("myClass", Class.class));
         assertEquals(URI.create("http://localhost:8080/foo"), config.get("uri", URI.class));
+        assertEquals(URI.create("http://localhost:8080/foo"), config.get("myURI", URI.class));
         assertEquals(1, config.getInt("int1"));
         assertEquals(asList("Foo", "Bar"), config.getStringList("stringList"));
         assertEquals("rick", config.getString("string1"));
