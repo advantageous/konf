@@ -76,6 +76,13 @@ public class ConfigImplTest {
     }
 
     @Test
+    public void testReadListOfConfig() throws Exception {
+        final List<Config> employees = config.getConfigList("employees");
+        assertEquals("Geoff", employees.get(0).getString("name"));
+        assertEquals("123", employees.get(0).getString("id"));
+    }
+
+    @Test
     public void testSimplePath() throws Exception {
 
         assertTrue(config.hasPath("configInner.int2"));

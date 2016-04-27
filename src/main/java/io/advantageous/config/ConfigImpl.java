@@ -6,8 +6,9 @@ import io.advantageous.boon.core.reflection.MapperSimple;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static io.advantageous.boon.core.reflection.BeanUtils.*;
+import static io.advantageous.boon.core.reflection.BeanUtils.findProperty;
 
 
 class ConfigImpl implements Config {
@@ -26,7 +27,7 @@ class ConfigImpl implements Config {
 
     @Override
     public boolean hasPath(String path) {
-        return findProperty(root, path)!=null;
+        return findProperty(root, path) != null;
     }
 
     @Override
@@ -42,7 +43,7 @@ class ConfigImpl implements Config {
     }
 
     private void validatePath(String path) {
-        if (findProperty(root, path)==null) {
+        if (findProperty(root, path) == null) {
             throw new IllegalArgumentException("Path or property " + path + " does not exist");
         }
     }
@@ -79,13 +80,30 @@ class ConfigImpl implements Config {
     }
 
     @Override
+    public List<Config> getConfigList(String path) {
+        validatePath(path);
+        final Object value = findProperty(root, path);
+        if (!(value instanceof List)) {
+            throw new IllegalArgumentException("Expecting list at location " + path + "but found " + value.getClass());
+        }
+        final List<Object> list = (List<Object>) value;
+        if (list.stream().anyMatch(o -> !(o instanceof Map))) {
+            throw new IllegalArgumentException("List must contain config maps only");
+        }
+        return list.stream().map(o -> (Map<String, Object>) o)
+                .map(ConfigImpl::new)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
     public <T> T get(String path, Class<T> type) {
         validatePath(path);
         final Object value = findProperty(root, path);
 
         if (type.isAssignableFrom(value.getClass())) {
             return (T) value;
-        } else if (value instanceof Map){
+        } else if (value instanceof Map) {
             final Map<String, Object> map = getMap(path);
             return mapper.fromMap(map, type);
         } else {
@@ -97,7 +115,7 @@ class ConfigImpl implements Config {
     public <T> List<T> getList(String path, Class<T> componentType) {
 
         validatePath(path);
-        List<Map> list = (List)findProperty(root, path);
+        List<Map> list = (List) findProperty(root, path);
         return mapper.convertListOfMapsToObjects(list, componentType);
     }
 
