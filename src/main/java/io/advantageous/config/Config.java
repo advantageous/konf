@@ -5,6 +5,8 @@ import java.util.Map;
 
 /**
  * Configuration Interface
+ * @author Rick Hightower
+ * @author Geoff Chandler
  */
 public interface Config {
 
@@ -19,6 +21,8 @@ public interface Config {
 
     /**
      * Checks to see if config has the path specified.
+     * @param path path to property.
+     * @return true if the path exists.
      */
     boolean hasPath(String path);
 

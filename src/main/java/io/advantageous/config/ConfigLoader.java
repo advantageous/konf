@@ -10,7 +10,7 @@ import static java.lang.Thread.currentThread;
 /**
  * Javascript configuration loader.
  *
- * @author Geoff Chandler <geoffc@gmail.com>
+ * @author Geoff Chandler geoffc@gmail.com
  */
 @SuppressWarnings("WeakerAccess")
 public class ConfigLoader {

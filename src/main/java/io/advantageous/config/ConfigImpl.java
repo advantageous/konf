@@ -12,7 +12,10 @@ import java.util.stream.Collectors;
 
 import static io.advantageous.boon.core.reflection.BeanUtils.findProperty;
 
-
+/**
+ * @author Rick Hightower
+ * @author Geoff Chandler
+ */
 class ConfigImpl implements Config {
 
     private final Object root;
