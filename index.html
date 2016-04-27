@@ -1,0 +1,273 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Konf by advantageous</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Konf</h1>
+        <p class="header">Java configuration library that uses Javascript configuration files.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/advantageous/konf/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/advantageous/konf/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/advantageous/konf">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/advantageous">advantageous</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="konf---typed-java-config-system" class="anchor" href="#konf---typed-java-config-system" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Konf - Typed Java config system</h1>
+
+<p>Java configuration library similar in concept to TypeSafe but uses full 
+JavaScript for configuration.</p>
+
+<p>Uses JavaScript/JSON as config for Java. </p>
+
+<p>You can use full JavaScript for configuration.</p>
+
+<h4>
+<a id="javascript-based-configuration-for-java" class="anchor" href="#javascript-based-configuration-for-java" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JavaScript based configuration for Java</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> config <span class="pl-k">=</span> {
+
+  myUri<span class="pl-k">:</span> <span class="pl-en">uri</span>(<span class="pl-s"><span class="pl-pds">"</span>http://host:9000/path?foo=bar<span class="pl-pds">"</span></span>),
+
+  someKey<span class="pl-k">:</span> {
+    nestedKey<span class="pl-k">:</span> <span class="pl-c1">234</span>,
+    other<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>this text<span class="pl-pds">"</span></span>
+  }
+
+};
+</pre></div>
+
+<h4>
+<a id="config-interface" class="anchor" href="#config-interface" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Config interface</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Config</span> {
+
+    <span class="pl-c">/** Get string at location. */</span>
+    <span class="pl-smi">String</span> <span class="pl-en">getString</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Checks to see if config has the path specified. */</span>
+    <span class="pl-k">boolean</span> <span class="pl-en">hasPath</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get int at location. */</span>
+    <span class="pl-k">int</span> <span class="pl-en">getInt</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get float at location. */</span>
+    <span class="pl-k">float</span> <span class="pl-en">getFloat</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get double at location. */</span>
+    <span class="pl-k">double</span> <span class="pl-en">getDouble</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get long at location. */</span>
+    <span class="pl-k">long</span> <span class="pl-en">getLong</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get list of strings at location. */</span>
+    <span class="pl-k">List&lt;<span class="pl-smi">String</span>&gt;</span> <span class="pl-en">getStringList</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get map at location. */</span>
+    <span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> <span class="pl-en">getMap</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get a sub-config at location. */</span>
+    <span class="pl-smi">Config</span> <span class="pl-en">getConfig</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/** Get list of sub-configs at location. */</span>
+    <span class="pl-k">List&lt;<span class="pl-smi">Config</span>&gt;</span> <span class="pl-en">getConfigList</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>);
+
+    <span class="pl-c">/**  Get a single POJO out of config at path. */</span>
+    <span class="pl-k">&lt;<span class="pl-smi">T</span>&gt;</span> <span class="pl-smi">T</span> <span class="pl-en">get</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>, <span class="pl-k">Class&lt;<span class="pl-smi">T</span>&gt;</span> <span class="pl-v">type</span>);
+
+    <span class="pl-c">/**  Get a list of POJOs. */</span>
+    <span class="pl-k">&lt;<span class="pl-smi">T</span>&gt;</span> <span class="pl-k">List&lt;<span class="pl-smi">T</span>&gt;</span> <span class="pl-en">getList</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>, <span class="pl-k">Class&lt;<span class="pl-smi">T</span>&gt;</span> <span class="pl-v">componentType</span>);
+}
+</pre></div>
+
+<p>The <code>getX</code> methods work like you would expect. Given this config file.</p>
+
+<h4>
+<a id="sample-config-for-testing-and-showing-how-config-works" class="anchor" href="#sample-config-for-testing-and-showing-how-config-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sample config for testing and showing how config works</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> config <span class="pl-k">=</span> {
+
+  myUri<span class="pl-k">:</span> <span class="pl-en">uri</span>(<span class="pl-s"><span class="pl-pds">"</span>http://host:9000/path?foo=bar<span class="pl-pds">"</span></span>),
+
+  someKey<span class="pl-k">:</span> {
+    nestedKey<span class="pl-k">:</span> <span class="pl-c1">234</span>,
+    other<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>this text<span class="pl-pds">"</span></span>
+  },
+
+  int1<span class="pl-k">:</span> <span class="pl-c1">1</span>,
+  float1<span class="pl-k">:</span> <span class="pl-c1">1.0</span>,
+  double1<span class="pl-k">:</span> <span class="pl-c1">1.0</span>,
+  long1<span class="pl-k">:</span> <span class="pl-c1">1</span>,
+  string1<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>rick<span class="pl-pds">"</span></span>,
+  stringList<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>Foo<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Bar<span class="pl-pds">'</span></span>],
+  configInner<span class="pl-k">:</span> {
+    int2<span class="pl-k">:</span> <span class="pl-c1">2</span>,
+    float2<span class="pl-k">:</span> <span class="pl-c1">2.0</span>
+  },
+  uri<span class="pl-k">:</span> <span class="pl-en">uri</span>(<span class="pl-s"><span class="pl-pds">"</span>http://localhost:8080/foo<span class="pl-pds">"</span></span>),
+  myClass<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>java.lang.Object<span class="pl-pds">"</span></span>,
+  myURI<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>http://localhost:8080/foo<span class="pl-pds">"</span></span>,
+  employee<span class="pl-k">:</span> {<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">123</span>, <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Geoff<span class="pl-pds">"</span></span>},
+  employees<span class="pl-k">:</span> [
+    {id<span class="pl-k">:</span> <span class="pl-c1">123</span>, <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Geoff<span class="pl-pds">"</span></span>},
+    {id<span class="pl-k">:</span> <span class="pl-c1">456</span>, <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Rick<span class="pl-pds">"</span></span>},
+    {id<span class="pl-k">:</span> <span class="pl-c1">789</span>, <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Paul<span class="pl-pds">"</span></span>}
+  ]
+};
+</pre></div>
+
+<p>First we load the config.</p>
+
+<h4>
+<a id="loading-the-config" class="anchor" href="#loading-the-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Loading the config.</h4>
+
+<div class="highlight highlight-source-java"><pre>
+    <span class="pl-k">private</span> <span class="pl-smi">Config</span> config;
+
+    @<span class="pl-smi">Before</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> setUp() throws <span class="pl-smi">Exception</span> {
+        config <span class="pl-k">=</span> <span class="pl-smi">ConfigLoader</span><span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>test-config.js<span class="pl-pds">"</span></span>);
+    }</pre></div>
+
+<p>Then we show reading basic types with the <code>config</code> object using <code>getX</code>.</p>
+
+<h4>
+<a id="reading-basic-types" class="anchor" href="#reading-basic-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading basic types</h4>
+
+<div class="highlight highlight-source-java"><pre>    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testSimple() throws <span class="pl-smi">Exception</span> {
+
+        <span class="pl-c">//getInt</span>
+        assertEquals(<span class="pl-c1">1</span>, config<span class="pl-k">.</span>getInt(<span class="pl-s"><span class="pl-pds">"</span>int1<span class="pl-pds">"</span></span>));
+
+        <span class="pl-c">//getStringList</span>
+        assertEquals(asList(<span class="pl-s"><span class="pl-pds">"</span>Foo<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Bar<span class="pl-pds">"</span></span>), 
+               config<span class="pl-k">.</span>getStringList(<span class="pl-s"><span class="pl-pds">"</span>stringList<span class="pl-pds">"</span></span>));
+
+        <span class="pl-c">//getString       </span>
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>rick<span class="pl-pds">"</span></span>, config<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>string1<span class="pl-pds">"</span></span>));
+
+        <span class="pl-c">//getDouble</span>
+        assertEquals(<span class="pl-c1">1.0</span>, config<span class="pl-k">.</span>getDouble(<span class="pl-s"><span class="pl-pds">"</span>double1<span class="pl-pds">"</span></span>), <span class="pl-c1">0.001</span>);
+
+        <span class="pl-c">//getLong</span>
+        assertEquals(<span class="pl-c1">1L</span>, config<span class="pl-k">.</span>getLong(<span class="pl-s"><span class="pl-pds">"</span>long1<span class="pl-pds">"</span></span>));
+
+        <span class="pl-c">//getFloat</span>
+        assertEquals(<span class="pl-c1">1.0f</span>, config<span class="pl-k">.</span>getFloat(<span class="pl-s"><span class="pl-pds">"</span>float1<span class="pl-pds">"</span></span>), <span class="pl-c1">0.001</span>);
+
+        <span class="pl-c">//Basic JDK value types are supported like class.</span>
+        assertEquals(<span class="pl-smi">Object</span><span class="pl-k">.</span>class, config<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>myClass<span class="pl-pds">"</span></span>, <span class="pl-smi">Class</span><span class="pl-k">.</span>class));
+
+        <span class="pl-c">//Basic JDK value types are supported like URI.</span>
+        assertEquals(<span class="pl-c1">URI</span><span class="pl-k">.</span>create(<span class="pl-s"><span class="pl-pds">"</span>http://localhost:8080/foo<span class="pl-pds">"</span></span>), 
+                config<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>myURI<span class="pl-pds">"</span></span>, <span class="pl-smi">URI</span><span class="pl-k">.</span>class));
+
+        assertEquals(<span class="pl-c1">URI</span><span class="pl-k">.</span>create(<span class="pl-s"><span class="pl-pds">"</span>http://localhost:8080/foo<span class="pl-pds">"</span></span>), 
+                config<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>uri<span class="pl-pds">"</span></span>, <span class="pl-smi">URI</span><span class="pl-k">.</span>class));
+
+    }
+</pre></div>
+
+<p>You can work with nested properties as well.</p>
+
+<h4>
+<a id="reading-a-nested-config" class="anchor" href="#reading-a-nested-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading a nested config</h4>
+
+<div class="highlight highlight-source-java"><pre>    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testGetConfig() throws <span class="pl-smi">Exception</span> {
+        <span class="pl-c">//Read nested config.</span>
+        <span class="pl-k">final</span> <span class="pl-smi">Config</span> configInner <span class="pl-k">=</span> config<span class="pl-k">.</span>getConfig(<span class="pl-s"><span class="pl-pds">"</span>configInner<span class="pl-pds">"</span></span>);
+        assertEquals(<span class="pl-c1">2</span>, configInner<span class="pl-k">.</span>getInt(<span class="pl-s"><span class="pl-pds">"</span>int2<span class="pl-pds">"</span></span>));
+        assertEquals(<span class="pl-c1">2.0f</span>, configInner<span class="pl-k">.</span>getFloat(<span class="pl-s"><span class="pl-pds">"</span>float2<span class="pl-pds">"</span></span>), <span class="pl-c1">0.001</span>);
+    }
+
+    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testGetMap() throws <span class="pl-smi">Exception</span> {
+        <span class="pl-c">//Read nested config as a Java map.</span>
+        <span class="pl-k">final</span> <span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> map <span class="pl-k">=</span> config<span class="pl-k">.</span>getMap(<span class="pl-s"><span class="pl-pds">"</span>configInner<span class="pl-pds">"</span></span>);
+        assertEquals(<span class="pl-c1">2</span>, (<span class="pl-k">int</span>) map<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>int2<span class="pl-pds">"</span></span>));
+        assertEquals(<span class="pl-c1">2.0f</span>, (<span class="pl-k">double</span>) map<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>float2<span class="pl-pds">"</span></span>), <span class="pl-c1">0.001</span>);
+    }</pre></div>
+
+<p>You can read deeply nested config items as well by specifying the 
+property path using dot notation. </p>
+
+<h4>
+<a id="reading-nested-properties-with-dot-notation" class="anchor" href="#reading-nested-properties-with-dot-notation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading nested properties with dot notation</h4>
+
+<div class="highlight highlight-source-java"><pre>    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testSimplePath() throws <span class="pl-smi">Exception</span> {
+
+        assertTrue(config<span class="pl-k">.</span>hasPath(<span class="pl-s"><span class="pl-pds">"</span>configInner.int2<span class="pl-pds">"</span></span>));
+        assertFalse(config<span class="pl-k">.</span>hasPath(<span class="pl-s"><span class="pl-pds">"</span>configInner.foo.bar<span class="pl-pds">"</span></span>));
+        assertEquals(<span class="pl-c1">2</span>, config<span class="pl-k">.</span>getInt(<span class="pl-s"><span class="pl-pds">"</span>configInner.int2<span class="pl-pds">"</span></span>));
+        assertEquals(<span class="pl-c1">2.0f</span>, config<span class="pl-k">.</span>getFloat(<span class="pl-s"><span class="pl-pds">"</span>configInner.float2<span class="pl-pds">"</span></span>), <span class="pl-c1">0.001</span>);
+    }</pre></div>
+
+<p>You can also read POJOs directly out of the config file.</p>
+
+<h4>
+<a id="reading-a-pojo-directly-out-of-the-config-file" class="anchor" href="#reading-a-pojo-directly-out-of-the-config-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading a pojo directly out of the config file</h4>
+
+<div class="highlight highlight-source-java"><pre>
+    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testReadClass() throws <span class="pl-smi">Exception</span> {
+        <span class="pl-k">final</span> <span class="pl-smi">Employee</span> employee <span class="pl-k">=</span> config<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>employee<span class="pl-pds">"</span></span>, <span class="pl-smi">Employee</span><span class="pl-k">.</span>class);
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>Geoff<span class="pl-pds">"</span></span>, employee<span class="pl-k">.</span>name);
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>, employee<span class="pl-k">.</span>id);
+    }
+</pre></div>
+
+<p>You can read a list of POJOs at once.</p>
+
+<h4>
+<a id="reading-a-pojo-list-directly-out-of-the-config-file" class="anchor" href="#reading-a-pojo-list-directly-out-of-the-config-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading a pojo list directly out of the config file</h4>
+
+<div class="highlight highlight-source-java"><pre>
+    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testReadListOfClass() throws <span class="pl-smi">Exception</span> {
+        <span class="pl-k">final</span> <span class="pl-k">List&lt;<span class="pl-smi">Employee</span>&gt;</span> employees <span class="pl-k">=</span> config<span class="pl-k">.</span>getList(<span class="pl-s"><span class="pl-pds">"</span>employees<span class="pl-pds">"</span></span>, <span class="pl-smi">Employee</span><span class="pl-k">.</span>class);
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>Geoff<span class="pl-pds">"</span></span>, employees<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>name);
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>, employees<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>id);
+    }</pre></div>
+
+<p>You can also read a list of config objects out of the config as well.</p>
+
+<h4>
+<a id="reading-a-config-list-directly-out-of-the-config-file" class="anchor" href="#reading-a-config-list-directly-out-of-the-config-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reading a config list directly out of the config file</h4>
+
+<div class="highlight highlight-source-java"><pre>
+    @<span class="pl-smi">Test</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> testReadListOfConfig() throws <span class="pl-smi">Exception</span> {
+        <span class="pl-k">final</span> <span class="pl-k">List&lt;<span class="pl-smi">Config</span>&gt;</span> employees <span class="pl-k">=</span> config<span class="pl-k">.</span>getConfigList(<span class="pl-s"><span class="pl-pds">"</span>employees<span class="pl-pds">"</span></span>);
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>Geoff<span class="pl-pds">"</span></span>, employees<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>));
+        assertEquals(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>, employees<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>));
+    }</pre></div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
