@@ -13,20 +13,25 @@ import static java.lang.Thread.currentThread;
  * @author Geoff Chandler <geoffc@gmail.com>
  */
 @SuppressWarnings("WeakerAccess")
-public class JsLoader {
+public class ConfigLoader {
 
     /**
      * Do not allow instantiation of this class.
      */
-    private JsLoader() {
+    private ConfigLoader() {
         throw new IllegalStateException("this class is not to be instantiated.");
     }
 
+    /**
+     * Loads a config file.
+     * @param path file path to config
+     * @return Config.
+     */
     public static Config load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
             engine.eval(new InputStreamReader(
-                    JsLoader.class.getClassLoader().getResourceAsStream("jjs-config-utils.js")));
+                    ConfigLoader.class.getClassLoader().getResourceAsStream("jjs-config-utils.js")));
             engine.eval(new InputStreamReader(
                     currentThread().getContextClassLoader().getResourceAsStream(path)));
         } catch (ScriptException e) {

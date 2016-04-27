@@ -3,7 +3,9 @@ package io.advantageous.config;
 import io.advantageous.boon.core.Conversions;
 import io.advantageous.boon.core.reflection.Mapper;
 import io.advantageous.boon.core.reflection.MapperSimple;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -69,7 +71,11 @@ class ConfigImpl implements Config {
     @Override
     public List<String> getStringList(String path) {
         validatePath(path);
-        return (List<String>) findProperty(root, path);
+        Object value = findProperty(root, path);
+        if (value instanceof ScriptObjectMirror) {
+            value = extractListFromScriptObjectMirror(path, value);
+        }
+        return (List<String>) value;
     }
 
 
@@ -82,7 +88,10 @@ class ConfigImpl implements Config {
     @Override
     public List<Config> getConfigList(String path) {
         validatePath(path);
-        final Object value = findProperty(root, path);
+        Object value = findProperty(root, path);
+        if (value instanceof ScriptObjectMirror) {
+            value = extractListFromScriptObjectMirror(path, value);
+        }
         if (!(value instanceof List)) {
             throw new IllegalArgumentException("Expecting list at location " + path + "but found " + value.getClass());
         }
@@ -94,6 +103,19 @@ class ConfigImpl implements Config {
                 .map(ConfigImpl::new)
                 .collect(Collectors.toList());
 
+    }
+
+    private Object extractListFromScriptObjectMirror(String path, Object value) {
+        final ScriptObjectMirror mirror = ((ScriptObjectMirror) value);
+        if (mirror.isArray()!=true) {
+            throw new IllegalArgumentException("Path muse resolve to a JS array or java.util.List path = " + path);
+        }
+        List<Object> list = new ArrayList(mirror.size());
+        for (int index = 0 ; index < mirror.size(); index++) {
+            list.add(mirror.getSlot(index));
+        }
+        value = list;
+        return value;
     }
 
     @Override
@@ -115,8 +137,18 @@ class ConfigImpl implements Config {
     public <T> List<T> getList(String path, Class<T> componentType) {
 
         validatePath(path);
-        List<Map> list = (List) findProperty(root, path);
-        return mapper.convertListOfMapsToObjects(list, componentType);
+
+        Object value = findProperty(root, path);
+        if (value instanceof ScriptObjectMirror) {
+            value = extractListFromScriptObjectMirror(path, value);
+        }
+
+        if (value instanceof List) {
+            List<Map> list = (List)value;
+            return mapper.convertListOfMapsToObjects(list, componentType);
+        } else {
+            throw new IllegalArgumentException("Path muse resolve to a java.util.List path = " + path);
+        }
     }
 
     @Override
