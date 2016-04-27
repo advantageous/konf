@@ -3,12 +3,8 @@ package io.advantageous.config;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.URISyntaxException;
-
-import static java.lang.ClassLoader.getSystemResource;
-import static java.nio.file.Paths.get;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * Javascript configuration loader.
@@ -27,9 +23,15 @@ public class JsLoader {
     public static Config load(final String path) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
-            engine.eval(new FileReader(get(getSystemResource("classpath:config-utils.js").toURI()).toString()));
-            engine.eval(new FileReader(get(getSystemResource(path).toURI()).toString()));
-        } catch (ScriptException | FileNotFoundException | URISyntaxException e) {
+            final Reader utilsReader =
+                    new InputStreamReader(JsLoader.class.getClassLoader().getResourceAsStream("config-utils.js"));
+            engine.eval(utilsReader);
+
+            final Reader configReader =
+                    new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(path));
+            engine.eval(configReader);
+
+        } catch (ScriptException e) {
             throw new IllegalArgumentException("unable to load javascript config at path: " + path);
         }
         return new ConfigImpl(engine.get("config"));
