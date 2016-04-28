@@ -13,15 +13,12 @@ import static org.junit.Assert.*;
 
 public class ConfigImplTest {
 
-
-    Map map;
-    Config config;
+    private Config config;
 
     @Before
     public void setUp() throws Exception {
 
-
-        map = map("int1", 1,
+        final Map map = map("int1", 1,
                 "float1", 1.0,
                 "double1", 1.0,
                 "long1", 1L,
@@ -46,8 +43,6 @@ public class ConfigImplTest {
 
     @Test
     public void testSimple() throws Exception {
-
-
         assertEquals(Object.class, config.get("myClass", Class.class));
         assertEquals(URI.create("http://localhost:8080/foo"), config.get("uri", URI.class));
         assertEquals(URI.create("http://localhost:8080/foo"), config.get("myURI", URI.class));
@@ -57,7 +52,7 @@ public class ConfigImplTest {
         assertEquals(1.0, config.getDouble("double1"), 0.001);
         assertEquals(1L, config.getLong("long1"));
         assertEquals(1.0f, config.getFloat("float1"), 0.001);
-        config.toString();
+        System.out.println(config.toString());
     }
 
     @Test
@@ -66,7 +61,6 @@ public class ConfigImplTest {
         assertEquals("Geoff", employee.name);
         assertEquals("123", employee.id);
     }
-
 
     @Test
     public void testReadListOfClass() throws Exception {
@@ -106,7 +100,6 @@ public class ConfigImplTest {
         assertEquals("123", employee.id);
     }
 
-
     @Test
     public void testGetMap() throws Exception {
         final Map<String, Object> map = config.getMap("configInner");
@@ -119,7 +112,8 @@ public class ConfigImplTest {
         config.getInt("department.employees");
     }
 
-    public static class Employee {
+    @SuppressWarnings("unused")
+    private static class Employee {
         private String id;
         private String name;
     }
