@@ -25,5 +25,11 @@ var config = {
     {id: 123, "name": "Geoff"},
     {id: 456, "name": "Rick"},
     {id: 789, 'name': "Paul"}
-  ]
+  ],
+  floats: [1.0, 2.0, 3.0],
+  doubles: [1.0, 2.0, 3.0],
+  longs: [1.0, 2.0, 3.0],
+  ints: [1, 2, 3],
+  "intsNull": [1, null, 3],
+  "intsWrongType": [1, "2", 3]
 };

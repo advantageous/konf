@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Configuration Interface
+ *
  * @author Rick Hightower
  * @author Geoff Chandler
  */
@@ -21,6 +22,7 @@ public interface Config {
 
     /**
      * Checks to see if config has the path specified.
+     *
      * @param path path to property.
      * @return true if the path exists.
      */
@@ -67,6 +69,37 @@ public interface Config {
      */
     List<String> getStringList(String path);
 
+    /**
+     * Get list of ints at location
+     *
+     * @param path path to list of strings.
+     * @return value
+     */
+    List<Integer> getIntList(String path);
+
+    /**
+     * Get list of doubles at location
+     *
+     * @param path path to list of strings.
+     * @return value
+     */
+    List<Double> getDoubleList(String path);
+
+    /**
+     * Get list of floats at location
+     *
+     * @param path path to list of strings.
+     * @return value
+     */
+    List<Float> getFloatList(String path);
+
+    /**
+     * Get list of doubles at location
+     *
+     * @param path path to list of strings.
+     * @return value
+     */
+    List<Long> getLongList(String path);
 
     /**
      * Get map at location

@@ -15,6 +15,7 @@ import static io.advantageous.boon.core.reflection.BeanUtils.findProperty;
 /**
  * Turns any Map or Java Object into config.
  * Works with any Java Object tree and or any Nashorn ScriptObjectMirror tree.
+ *
  * @author Rick Hightower
  * @author Geoff Chandler
  */
@@ -78,9 +79,45 @@ class ConfigFromObject implements Config {
         validatePath(path);
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
-            value = extractListFromScriptObjectMirror(path, value);
+            value = extractListFromScriptObjectMirror(path, value, String.class);
         }
         return (List<String>) value;
+    }
+
+    @Override
+    public List<Integer> getIntList(String path) {
+        return getNumberList(path).stream().map(Number::intValue).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Double> getDoubleList(String path) {
+        return getNumberList(path).stream().map(Number::doubleValue).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Float> getFloatList(String path) {
+        return getNumberList(path).stream().map(Number::floatValue).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> getLongList(String path) {
+        return getNumberList(path).stream().map(Number::longValue).collect(Collectors.toList());
+    }
+
+    private List<Number> getNumberList(String path) {
+        validatePath(path);
+        Object value = findProperty(root, path);
+        if (value instanceof ScriptObjectMirror) {
+            value = extractListFromScriptObjectMirror(path, value, Number.class);
+        } else if (value instanceof List) {
+            ((List) value).stream().forEach(o -> {
+                if (!(o instanceof Number)) {
+                    throw new IllegalArgumentException("Path must equate to list with Numbers," +
+                            " but found type " + (o == null ? o : o.getClass().getName()));
+                }
+            });
+        }
+        return (List<Number>) value;
     }
 
 
@@ -95,7 +132,7 @@ class ConfigFromObject implements Config {
         validatePath(path);
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
-            value = extractListFromScriptObjectMirror(path, value);
+            value = extractListFromScriptObjectMirror(path, value, Map.class);
         }
         if (!(value instanceof List)) {
             throw new IllegalArgumentException("Expecting list at location " + path + "but found " + value.getClass());
@@ -110,17 +147,26 @@ class ConfigFromObject implements Config {
 
     }
 
-    private Object extractListFromScriptObjectMirror(String path, Object value) {
+    private Object extractListFromScriptObjectMirror(String path, Object value, Class<?> typeCheck) {
         final ScriptObjectMirror mirror = ((ScriptObjectMirror) value);
-        if (mirror.isArray()!=true) {
-            throw new IllegalArgumentException("Path muse resolve to a JS array or java.util.List path = " + path);
+        if (mirror.isArray() != true) {
+            throw new IllegalArgumentException("Path must resolve to a JS array or java.util.List path = " + path);
         }
         List<Object> list = new ArrayList(mirror.size());
-        for (int index = 0 ; index < mirror.size(); index++) {
-            list.add(mirror.getSlot(index));
+        for (int index = 0; index < mirror.size(); index++) {
+            final Object item = mirror.getSlot(index);
+
+            if (item == null) {
+                throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
+                        + " issue at index " + index + " but item is null");
+            }
+            if (!typeCheck.isAssignableFrom(item.getClass())) {
+                throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
+                        + " issue at index " + index + "but item is " + item.getClass().getName());
+            }
+            list.add(item);
         }
-        value = list;
-        return value;
+        return list;
     }
 
     @Override
@@ -145,11 +191,11 @@ class ConfigFromObject implements Config {
 
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
-            value = extractListFromScriptObjectMirror(path, value);
+            value = extractListFromScriptObjectMirror(path, value, Map.class);
         }
 
         if (value instanceof List) {
-            List<Map> list = (List)value;
+            List<Map> list = (List) value;
             return mapper.convertListOfMapsToObjects(list, componentType);
         } else {
             throw new IllegalArgumentException("Path muse resolve to a java.util.List path = " + path);

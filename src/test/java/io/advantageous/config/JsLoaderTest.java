@@ -98,6 +98,15 @@ public class JsLoaderTest {
     }
 
     @Test
+    public void testNumberList() throws Exception {
+        assertEquals(asList(1.0, 2.0, 3.0), config.getDoubleList("doubles"));
+        assertEquals(asList(1.0f, 2.0f, 3.0f), config.getFloatList("floats"));
+        assertEquals(asList(1, 2, 3), config.getIntList("ints"));
+        assertEquals(asList(1L, 2L, 3L), config.getLongList("longs"));
+    }
+
+
+    @Test
     public void testLoadConfig() throws Exception {
         Config config = ConfigLoader.load("test-config.js");
         URI uri = config.get("myUri", URI.class);
@@ -118,5 +127,18 @@ public class JsLoaderTest {
         private String id;
         private String name;
     }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongTypeInList() {
+        assertEquals(asList(1, 2, 3), config.getIntList("intsWrongType"));
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void listHasNull() {
+        assertEquals(asList(1, 2, 3), config.getIntList("intsNull"));
+    }
+
 
 }

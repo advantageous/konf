@@ -36,9 +36,34 @@ public class ConfigImplTest {
                         map("id", 123, "name", "Geoff"),
                         map("id", 456, "name", "Rick"),
                         map("id", 789, "name", "Paul")
-                )
+                ),
+                "floats", asList(1.0, 2.0, 3.0),
+                "doubles", asList(1.0, 2.0, 3.0),
+                "longs", asList(1.0, 2.0, 3.0),
+                "ints", asList(1, 2, 3),
+                "intsNull", asList(1, null, 3),
+                "intsWrongType", asList(1, "2", 3)
         );
         config = new ConfigFromObject(map);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongTypeInList() {
+        assertEquals(asList(1, 2, 3), config.getIntList("intsWrongType"));
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void listHasNull() {
+        assertEquals(asList(1, 2, 3), config.getIntList("intsNull"));
+    }
+
+    @Test
+    public void testNumberList() throws Exception {
+        assertEquals(asList(1.0, 2.0, 3.0), config.getDoubleList("doubles"));
+        assertEquals(asList(1.0f, 2.0f, 3.0f), config.getFloatList("floats"));
+        assertEquals(asList(1, 2, 3), config.getIntList("ints"));
+        assertEquals(asList(1L, 2L, 3L), config.getLongList("longs"));
     }
 
     @Test
