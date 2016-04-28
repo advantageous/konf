@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -140,5 +141,18 @@ public class JsLoaderTest {
         assertEquals(asList(1, 2, 3), config.getIntList("intsNull"));
     }
 
+
+    @Test
+    public void testDuration() {
+        assertEquals(Duration.ofMillis(10), config.getDuration("tenMillis"));
+        assertEquals(Duration.ofMillis(10), config.getDuration("tenMilliseconds"));
+        assertEquals(Duration.ofSeconds(10), config.getDuration("tenSeconds"));
+        assertEquals(Duration.ofMinutes(10), config.getDuration("tenMinutes"));
+        assertEquals(Duration.ofHours(10), config.getDuration("tenHours"));
+        assertEquals(Duration.ofDays(10), config.getDuration("tenDays"));
+        assertEquals(Duration.ofMinutes(15), config.getDuration("fifteenMinutes"));
+        //assertEquals(Duration.ofSeconds(10), config.getDuration("tenSeconds2"));
+
+    }
 
 }

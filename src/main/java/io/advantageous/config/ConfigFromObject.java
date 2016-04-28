@@ -5,12 +5,20 @@ import io.advantageous.boon.core.reflection.Mapper;
 import io.advantageous.boon.core.reflection.MapperSimple;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static io.advantageous.boon.core.Maps.map;
 import static io.advantageous.boon.core.reflection.BeanUtils.findProperty;
+import static java.util.Arrays.asList;
+import static java.util.concurrent.TimeUnit.*;
 
 /**
  * Turns any Map or Java Object into config.
@@ -23,6 +31,15 @@ class ConfigFromObject implements Config {
 
     private final Object root;
     private final Mapper mapper = new MapperSimple();
+
+    private final Map<TimeUnit, List<String>> timeUnitMap = map(
+            MICROSECONDS, asList("us", "micro", "micros", "microsecond", "microseconds"),
+            MILLISECONDS, asList("ms", "milli", "millis", "millisecond", "milliseconds"),
+            SECONDS, asList("seconds", "second", "s"),
+            MINUTES, asList("minutes", "minute", "m"),
+            HOURS, asList("hours", "hour", "h"),
+            DAYS, asList("days", "day", "d")
+    );
 
     <T> ConfigFromObject(T object) {
         this.root = object;
@@ -69,6 +86,49 @@ class ConfigFromObject implements Config {
     }
 
     @Override
+    public Duration getDuration(String path) {
+        validatePath(path);
+
+        final Object value = findProperty(root, path);
+
+
+        if (value instanceof Duration) {
+            return (Duration) value;
+        }
+
+
+        if (value instanceof Number) {
+            return Duration.ofMillis(((Number) value).longValue());
+        }
+
+        if (value instanceof CharSequence) {
+            final String durationString = value.toString();
+            try {
+                return Duration.parse(value.toString());
+            } catch (DateTimeParseException dateTimeParse) {
+
+                final Optional<Map.Entry<TimeUnit, List<String>>> entry = timeUnitMap.entrySet().stream().filter(timeUnitListEntry ->
+                        timeUnitListEntry.getValue().stream().anyMatch((Predicate<String>)
+                                postFix -> durationString.endsWith(postFix))).findFirst();
+
+                if (!entry.isPresent()) {
+                    throw new IllegalArgumentException("Path does not resolve to a Duration");
+                }
+                entry.map(timeUnitListEntry -> {
+                    final Optional<String> postFix = timeUnitListEntry.getValue()
+                            .stream().filter(durationString::endsWith).findFirst();
+                    final String unitString = durationString.replace(postFix.get(), "").trim();
+                    long unit = Long.parseLong(unitString);
+                    return Duration.ofNanos(timeUnitListEntry.getKey().toNanos(unit));
+                }).get();
+            }
+        } else {
+            throw new IllegalArgumentException("Path does not resolve to a Duration");
+        }
+        throw new IllegalArgumentException("Path does not resolve to a Duration");
+    }
+
+    @Override
     public Map<String, Object> getMap(String path) {
         validatePath(path);
         return ((Map) findProperty(root, path));
@@ -79,9 +139,9 @@ class ConfigFromObject implements Config {
         validatePath(path);
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
-            value = extractListFromScriptObjectMirror(path, value, String.class);
+            value = extractListFromScriptObjectMirror(path, value, CharSequence.class);
         }
-        return (List<String>) value;
+        return ((List<CharSequence>) value).stream().map((CharSequence::toString)).collect(Collectors.toList());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.advantageous.config;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,15 @@ public interface Config {
      * @return value
      */
     long getLong(String path);
+
+
+    /**
+     * Get Duration at location
+     *
+     * @param path path to property.
+     * @return value
+     */
+    Duration getDuration(String path);
 
     /**
      * Get list of strings at location

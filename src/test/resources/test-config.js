@@ -30,6 +30,14 @@ var config = {
   doubles: [1.0, 2.0, 3.0],
   longs: [1.0, 2.0, 3.0],
   ints: [1, 2, 3],
-  "intsNull": [1, null, 3],
-  "intsWrongType": [1, "2", 3]
+  intsNull: [1, null, 3],
+  intsWrongType: [1, "2", 3],
+  tenSeconds : seconds(10),
+  tenDays : days(10),
+  tenMinutes : minutes(10),
+  tenHours : hours(10),
+  tenMillis : millis(10),
+  tenMilliseconds : milliseconds(10),
+  fifteenMinutes : "PT15M",
+  tenSeconds2 : "10 seconds"
 };
