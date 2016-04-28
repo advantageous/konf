@@ -99,6 +99,15 @@ public class ConfigImplTest {
     }
 
     @Test
+    public void testGetConfigConvertIntoPojo() throws Exception {
+        final Config configInner = config.getConfig("employee");
+        final Employee employee = configInner.get("this", Employee.class);
+        assertEquals("Geoff", employee.name);
+        assertEquals("123", employee.id);
+    }
+
+
+    @Test
     public void testGetMap() throws Exception {
         final Map<String, Object> map = config.getMap("configInner");
         assertEquals(2, (int) map.get("int2"));
