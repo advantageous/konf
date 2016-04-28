@@ -11,12 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class JsLoaderTest {
-
 
     private Config config;
 
@@ -24,8 +21,6 @@ public class JsLoaderTest {
     public void setUp() throws Exception {
         config = ConfigLoader.load("test-config.js");
     }
-
-
 
     @Test
     public void testSimple() throws Exception {
@@ -39,9 +34,8 @@ public class JsLoaderTest {
         assertEquals(1.0, config.getDouble("double1"), 0.001);
         assertEquals(1L, config.getLong("long1"));
         assertEquals(1.0f, config.getFloat("float1"), 0.001);
-        config.toString();
+        System.out.println(config.toString());
     }
-
 
     @Test
     public void testReadClass() throws Exception {
@@ -49,7 +43,6 @@ public class JsLoaderTest {
         assertEquals("Geoff", employee.name);
         assertEquals("123", employee.id);
     }
-
 
     @Test
     public void testReadListOfClass() throws Exception {
@@ -93,11 +86,6 @@ public class JsLoaderTest {
         config.getInt("department.employees");
     }
 
-    public static class Employee {
-        private String id;
-        private String name;
-    }
-
     @Test(expected = InvocationTargetException.class)
     public void testPrivateConstructor() throws Exception {
         Assert.assertEquals(0, ConfigLoader.class.getConstructors().length);
@@ -123,6 +111,12 @@ public class JsLoaderTest {
     @Test(expected = IllegalArgumentException.class)
     public void testBadJs() throws Exception {
         ConfigLoader.load("bad-config.js");
+    }
+
+    @SuppressWarnings("unused")
+    private static class Employee {
+        private String id;
+        private String name;
     }
 
 }

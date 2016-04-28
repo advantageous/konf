@@ -17,7 +17,7 @@
  */
 
 group 'io.advantageous.konf'
-version '1.0.0.RELEASE'
+version '1.0.1'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -29,7 +29,6 @@ task wrapper(type: Wrapper) {
 }
 
 test.onlyIf { !Boolean.getBoolean('skip.tests') }
-
 
 repositories {
     mavenCentral()

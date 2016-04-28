@@ -22,10 +22,10 @@ public class ConfigLoader {
         throw new IllegalStateException("this class is not to be instantiated.");
     }
 
-
     /**
      * Works with any nested structure of maps and lists and basic Java types.
      * Works with Pojos, Maps, Lists.
+     *
      * @param rootOfConfig rootConfig object
      * @return Config version of object map.
      */
@@ -35,17 +35,25 @@ public class ConfigLoader {
 
     /**
      * Loads a config file.
-     * @param path file path to config
+     *
+     * @param resources classpath resources to from which to load javascript
      * @return Config.
      */
-    public static Config load(final String path) {
+    public static Config load(final String... resources) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
             engine.eval(new InputStreamReader(
                     ConfigLoader.class.getClassLoader().getResourceAsStream("jjs-config-utils.js")));
-            engine.eval(new InputStreamReader(
-                    currentThread().getContextClassLoader().getResourceAsStream(path)));
-        } catch (ScriptException e) {
+
+            for (final String resource : resources) {
+                try {
+                    engine.eval(new InputStreamReader(
+                            currentThread().getContextClassLoader().getResourceAsStream(resource)));
+                } catch (final Exception e) {
+                    throw new IllegalArgumentException("unable to execute javascript. " + resource, e);
+                }
+            }
+        } catch (final ScriptException e) {
             throw new IllegalArgumentException("unable to execute javascript.", e);
         }
         return loadFromObject(engine.get("config"));
