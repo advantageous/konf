@@ -150,8 +150,15 @@ public class JsLoaderTest {
         assertEquals(Duration.ofMinutes(10), config.getDuration("tenMinutes"));
         assertEquals(Duration.ofHours(10), config.getDuration("tenHours"));
         assertEquals(Duration.ofDays(10), config.getDuration("tenDays"));
+
         assertEquals(Duration.ofMinutes(15), config.getDuration("fifteenMinutes"));
+
         assertEquals(Duration.ofSeconds(10), config.getDuration("tenSeconds2"));
+        assertEquals(Duration.ofMinutes(10), config.getDuration("tenMinutes2"));
+        assertEquals(Duration.ofHours(10), config.getDuration("tenHours2"));
+        assertEquals(Duration.ofDays(10), config.getDuration("tenDays2"));
+        assertEquals(Duration.ofMillis(10), config.getDuration("tenMillis2"));
+        assertEquals(Duration.ofMillis(10), config.getDuration("tenMilliseconds2"));
 
     }
 

@@ -33,8 +33,8 @@ class ConfigFromObject implements Config {
     private final Mapper mapper = new MapperSimple();
 
     private final Map<TimeUnit, List<String>> timeUnitMap = map(
-            MICROSECONDS, asList("us", "micro", "micros", "microsecond", "microseconds"),
-            MILLISECONDS, asList("ms", "milli", "millis", "millisecond", "milliseconds"),
+            MICROSECONDS, asList("microseconds", "microsecond", "micros", "micro", "us"),
+            MILLISECONDS, asList("milliseconds", "millisecond", "millis", "milli", "ms"),
             SECONDS, asList("seconds", "second", "s"),
             MINUTES, asList("minutes", "minute", "m"),
             HOURS, asList("hours", "hour", "h"),
