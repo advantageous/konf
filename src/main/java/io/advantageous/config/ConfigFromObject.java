@@ -114,7 +114,7 @@ class ConfigFromObject implements Config {
                 if (!entry.isPresent()) {
                     throw new IllegalArgumentException("Path does not resolve to a Duration");
                 }
-                entry.map(timeUnitListEntry -> {
+                return entry.map(timeUnitListEntry -> {
                     final Optional<String> postFix = timeUnitListEntry.getValue()
                             .stream().filter(durationString::endsWith).findFirst();
                     final String unitString = durationString.replace(postFix.get(), "").trim();
@@ -125,7 +125,6 @@ class ConfigFromObject implements Config {
         } else {
             throw new IllegalArgumentException("Path does not resolve to a Duration");
         }
-        throw new IllegalArgumentException("Path does not resolve to a Duration");
     }
 
     @Override

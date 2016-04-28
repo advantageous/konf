@@ -151,7 +151,7 @@ public class JsLoaderTest {
         assertEquals(Duration.ofHours(10), config.getDuration("tenHours"));
         assertEquals(Duration.ofDays(10), config.getDuration("tenDays"));
         assertEquals(Duration.ofMinutes(15), config.getDuration("fifteenMinutes"));
-        //assertEquals(Duration.ofSeconds(10), config.getDuration("tenSeconds2"));
+        assertEquals(Duration.ofSeconds(10), config.getDuration("tenSeconds2"));
 
     }
 
