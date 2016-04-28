@@ -19,23 +19,23 @@ Konf is in the [public maven repo](http://search.maven.org/#search%7Cga%7C1%7Cg%
 <dependency>
     <groupId>io.advantageous.konf</groupId>
     <artifactId>konf</artifactId>
-    <version>1.0.0.RC1</version>
+    <version>1.0.0.RELEASE</version>
 </dependency>
 ```
 
 ### Using konf from gradle
 ```java
-compile 'io.advantageous.konf:konf:1.0.0.RC1'
+compile 'io.advantageous.konf:konf:1.0.0.RELEASE'
 ```
 
 ### Using konf from scala sbt
 ```java
-libraryDependencies += "io.advantageous.konf" % "konf" % "1.0.0.RC1"
+libraryDependencies += "io.advantageous.konf" % "konf" % "1.0.0.RELEASE"
 ```
 
 ### Using konf from clojure leiningen
 ```lisp
-[io.advantageous.konf/konf "1.0.0.RC1"]
+[io.advantageous.konf/konf "1.0.0.RELEASE"]
 ```
 
 Here is an example config for JavaScript. 
