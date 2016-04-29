@@ -85,7 +85,7 @@ class ConfigFromObject implements Config {
     }
 
     @Override
-    public Duration getDuration(String path) {
+    public Duration getDuration(final String path) {
         validatePath(path);
 
         final Object value = findProperty(root, path);
@@ -108,20 +108,21 @@ class ConfigFromObject implements Config {
                 return Duration.parse(value.toString());
             } catch (DateTimeParseException dateTimeParse) {
                 /* If it is not ISO-8601 format assume it is typesafe config spec. format. */
-                return parseUsingTypeSafeSpec(durationString);
+                return parseUsingTypeSafeSpec(path, durationString);
             }
         } else {
-            throw new IllegalArgumentException("Path does not resolve to a duration");
+            throw new IllegalArgumentException("Path " + path + " does not resolve to a duration for value " + value);
         }
     }
 
     /**
      * Parses a string into duration type safe spec format if possible.
      *
+     * @param path           property path
      * @param durationString duration string using "10 seconds", "10 days", etc. format from type safe.
      * @return Duration parsed from typesafe config format.
      */
-    private Duration parseUsingTypeSafeSpec(final String durationString) {
+    private Duration parseUsingTypeSafeSpec(final String path, final String durationString) {
 
         /* Check to see if any of the postfixes are at the end of the durationString. */
         final Optional<Map.Entry<TimeUnit, List<String>>> entry = timeUnitMap.entrySet().stream()
@@ -134,7 +135,7 @@ class ConfigFromObject implements Config {
 
         /* if we did not match any postFixes then exit early with an exception. */
         if (!entry.isPresent()) {
-            throw new IllegalArgumentException("Path does not resolve to a duration " + durationString);
+            throw new IllegalArgumentException("Path " + path + " does not resolve to a duration " + durationString);
         }
 
         /*  Convert the value to a Duration.
@@ -164,13 +165,13 @@ class ConfigFromObject implements Config {
     }
 
     @Override
-    public Map<String, Object> getMap(String path) {
+    public Map<String, Object> getMap(final String path) {
         validatePath(path);
         return ((Map) findProperty(root, path));
     }
 
     @Override
-    public List<String> getStringList(String path) {
+    public List<String> getStringList(final String path) {
         validatePath(path);
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
@@ -180,26 +181,26 @@ class ConfigFromObject implements Config {
     }
 
     @Override
-    public List<Integer> getIntList(String path) {
+    public List<Integer> getIntList(final String path) {
         return getNumberList(path).stream().map(Number::intValue).collect(Collectors.toList());
     }
 
     @Override
-    public List<Double> getDoubleList(String path) {
+    public List<Double> getDoubleList(final String path) {
         return getNumberList(path).stream().map(Number::doubleValue).collect(Collectors.toList());
     }
 
     @Override
-    public List<Float> getFloatList(String path) {
+    public List<Float> getFloatList(final String path) {
         return getNumberList(path).stream().map(Number::floatValue).collect(Collectors.toList());
     }
 
     @Override
-    public List<Long> getLongList(String path) {
+    public List<Long> getLongList(final String path) {
         return getNumberList(path).stream().map(Number::longValue).collect(Collectors.toList());
     }
 
-    private List<Number> getNumberList(String path) {
+    private List<Number> getNumberList(final String path) {
         validatePath(path);
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
@@ -217,13 +218,13 @@ class ConfigFromObject implements Config {
 
 
     @Override
-    public Config getConfig(String path) {
+    public Config getConfig(final String path) {
         validatePath(path);
         return new ConfigFromObject(getMap(path));
     }
 
     @Override
-    public List<Config> getConfigList(String path) {
+    public List<Config> getConfigList(final String path) {
         validatePath(path);
         Object value = findProperty(root, path);
         if (value instanceof ScriptObjectMirror) {
@@ -234,7 +235,7 @@ class ConfigFromObject implements Config {
         }
         final List<Object> list = (List<Object>) value;
         if (list.stream().anyMatch(o -> !(o instanceof Map))) {
-            throw new IllegalArgumentException("List must contain config maps only");
+            throw new IllegalArgumentException("List must contain config maps only for path " + path);
         }
         return list.stream().map(o -> (Map<String, Object>) o)
                 .map(ConfigFromObject::new)
@@ -242,7 +243,7 @@ class ConfigFromObject implements Config {
 
     }
 
-    private Object extractListFromScriptObjectMirror(String path, Object value, Class<?> typeCheck) {
+    private Object extractListFromScriptObjectMirror(final String path, final Object value, final Class<?> typeCheck) {
         final ScriptObjectMirror mirror = ((ScriptObjectMirror) value);
         if (mirror.isArray() != true) {
             throw new IllegalArgumentException("Path must resolve to a JS array or java.util.List path = " + path);
@@ -253,11 +254,11 @@ class ConfigFromObject implements Config {
 
             if (item == null) {
                 throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
-                        + " issue at index " + index + " but item is null");
+                        + " issue at index " + index + " but item is null path is " + path);
             }
             if (!typeCheck.isAssignableFrom(item.getClass())) {
                 throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
-                        + " issue at index " + index + "but item is " + item.getClass().getName());
+                        + " issue at index " + index + "but item is " + item.getClass().getName() + " path is " + path);
             }
             list.add(item);
         }
@@ -293,7 +294,7 @@ class ConfigFromObject implements Config {
             List<Map> list = (List) value;
             return mapper.convertListOfMapsToObjects(list, componentType);
         } else {
-            throw new IllegalArgumentException("Path muse resolve to a java.util.List path = " + path);
+            throw new IllegalArgumentException("Path must resolve to a java.util.List path = " + path);
         }
     }
 
