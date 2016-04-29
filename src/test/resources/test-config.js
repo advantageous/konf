@@ -43,6 +43,6 @@ var config = {
   tenMinutes2: "10m",
   tenHours2: "10 h",
   tenDays2: "10 day",
-  tenMillis2: "10 ms",
+  tenMillis2: "10ms",
   tenMilliseconds2: milliseconds(10)
 };

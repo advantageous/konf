@@ -107,23 +107,30 @@ class ConfigFromObject implements Config {
                 return Duration.parse(value.toString());
             } catch (DateTimeParseException dateTimeParse) {
 
-                final Optional<Map.Entry<TimeUnit, List<String>>> entry = timeUnitMap.entrySet().stream().filter(timeUnitListEntry ->
-                        timeUnitListEntry.getValue().stream().anyMatch((Predicate<String>)
-                                postFix -> durationString.endsWith(postFix))).findFirst();
+                final Optional<Map.Entry<TimeUnit, List<String>>> entry = timeUnitMap.entrySet().stream()
+                        .filter(timeUnitListEntry ->
+                                timeUnitListEntry.getValue().stream().anyMatch((Predicate<String>)
+                                        durationString::endsWith)).findFirst();
 
                 if (!entry.isPresent()) {
-                    throw new IllegalArgumentException("Path does not resolve to a Duration");
+                    throw new IllegalArgumentException("Path does not resolve to a duration " +  durationString);
                 }
                 return entry.map(timeUnitListEntry -> {
                     final Optional<String> postFix = timeUnitListEntry.getValue()
                             .stream().filter(durationString::endsWith).findFirst();
                     final String unitString = durationString.replace(postFix.get(), "").trim();
-                    long unit = Long.parseLong(unitString);
-                    return Duration.ofNanos(timeUnitListEntry.getKey().toNanos(unit));
+
+                    try {
+                        long unit = Long.parseLong(unitString);
+                        return Duration.ofNanos(timeUnitListEntry.getKey().toNanos(unit));
+                    }catch (NumberFormatException nfe) {
+
+                        throw new IllegalArgumentException("Path does not resolve to a duration " + durationString);
+                    }
                 }).get();
             }
         } else {
-            throw new IllegalArgumentException("Path does not resolve to a Duration");
+            throw new IllegalArgumentException("Path does not resolve to a duration");
         }
     }
 
