@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static io.advantageous.boon.core.Maps.map;
@@ -91,47 +90,77 @@ class ConfigFromObject implements Config {
 
         final Object value = findProperty(root, path);
 
-
+        /* It is already a duration so just return it. */
         if (value instanceof Duration) {
             return (Duration) value;
         }
 
-
+        /* It is a number with no postfix so assume milliseconds. */
         if (value instanceof Number) {
             return Duration.ofMillis(((Number) value).longValue());
         }
 
+        /* It is some sort of string like thing. */
         if (value instanceof CharSequence) {
-            final String durationString = value.toString();
+            final String durationString = value.toString(); //Make it an actual string.
+            /* try to parse it as a ISO-8601 duration format. */
             try {
                 return Duration.parse(value.toString());
             } catch (DateTimeParseException dateTimeParse) {
-
-                final Optional<Map.Entry<TimeUnit, List<String>>> entry = timeUnitMap.entrySet().stream()
-                        .filter(timeUnitListEntry ->
-                                timeUnitListEntry.getValue().stream().anyMatch((Predicate<String>)
-                                        durationString::endsWith)).findFirst();
-
-                if (!entry.isPresent()) {
-                    throw new IllegalArgumentException("Path does not resolve to a duration " +  durationString);
-                }
-                return entry.map(timeUnitListEntry -> {
-                    final Optional<String> postFix = timeUnitListEntry.getValue()
-                            .stream().filter(durationString::endsWith).findFirst();
-                    final String unitString = durationString.replace(postFix.get(), "").trim();
-
-                    try {
-                        long unit = Long.parseLong(unitString);
-                        return Duration.ofNanos(timeUnitListEntry.getKey().toNanos(unit));
-                    }catch (NumberFormatException nfe) {
-
-                        throw new IllegalArgumentException("Path does not resolve to a duration " + durationString);
-                    }
-                }).get();
+                /* If it is not ISO-8601 format assume it is typesafe config spec. format. */
+                return parseUsingTypeSafeSpec(durationString);
             }
         } else {
             throw new IllegalArgumentException("Path does not resolve to a duration");
         }
+    }
+
+    /**
+     * Parses a string into duration type safe spec format if possible.
+     *
+     * @param durationString duration string using "10 seconds", "10 days", etc. format from type safe.
+     * @return Duration parsed from typesafe config format.
+     */
+    private Duration parseUsingTypeSafeSpec(final String durationString) {
+
+        /* Check to see if any of the postfixes are at the end of the durationString. */
+        final Optional<Map.Entry<TimeUnit, List<String>>> entry = timeUnitMap.entrySet().stream()
+                .filter(timeUnitListEntry ->
+                        /* Go through values in map and see if there are any matches. */
+                        timeUnitListEntry.getValue()
+                                .stream()
+                                .anyMatch(durationString::endsWith))
+                .findFirst();
+
+        /* if we did not match any postFixes then exit early with an exception. */
+        if (!entry.isPresent()) {
+            throw new IllegalArgumentException("Path does not resolve to a duration " + durationString);
+        }
+
+        /*  Convert the value to a Duration.
+         */
+        return entry.map(timeUnitListEntry -> {
+
+            /* Find the prefix that matches the best. Prefixes are ordered by length.
+            * Biggest prefixes are matched first.
+            */
+            final Optional<String> postFix = timeUnitListEntry
+                    .getValue()
+                    .stream()
+                    .filter(durationString::endsWith)
+                    .findFirst();
+
+            /* Remove the prefix from the string so only the unit remains. */
+            final String unitString = durationString.replace(postFix.get(), "").trim();
+
+            /* Try to parse the units, if the units do not parse than they gave us a bad prefix. */
+            try {
+                long unit = Long.parseLong(unitString);
+                return Duration.ofNanos(timeUnitListEntry.getKey().toNanos(unit));
+            } catch (NumberFormatException nfe) {
+                throw new IllegalArgumentException("Path does not resolve to a duration " + durationString);
+            }
+        }).get();
     }
 
     @Override
