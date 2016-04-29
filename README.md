@@ -310,7 +310,7 @@ You can also read a list of config objects out of the config as well.
  
 #### Example YAML
  
- ```javascript
+```yaml
    name: Nathan Sweet
      age: 28
      address: 4011 16th Ave S
@@ -319,7 +319,7 @@ You can also read a list of config objects out of the config as well.
         number: 206-555-5138
       - name: Work
         number: 425-555-2306
- ```
+```
  
 #### Using Konf with YAML
  
