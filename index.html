@@ -17,7 +17,7 @@
     <div class="wrapper">
       <header>
         <h1 class="header">Konf</h1>
-        <p class="header">Java configuration library that uses Javascript configuration files.</p>
+        <p class="header">Java configuration library that uses JSON, YAML, or Javascript configuration files.</p>
 
         <ul>
           <li class="download"><a class="buttons" href="https://github.com/advantageous/konf/zipball/master">Download ZIP</a></li>
@@ -55,13 +55,13 @@ equates to a Java map.</p>
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;io.advantageous.konf&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;konf&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;1.0.0.RELEASE&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;1.1.0.RELEASE&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h3>
 <a id="using-konf-from-gradle" class="anchor" href="#using-konf-from-gradle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using konf from gradle</h3>
 
-<div class="highlight highlight-source-java"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>io.advantageous.konf:konf:1.0.0.RELEASE<span class="pl-pds">'</span></span></pre></div>
+<div class="highlight highlight-source-java"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>io.advantageous.konf:konf:1.1.0.RELEASE<span class="pl-pds">'</span></span></pre></div>
 
 <h3>
 <a id="using-konf-from-scala-sbt" class="anchor" href="#using-konf-from-scala-sbt" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using konf from scala sbt</h3>
@@ -387,6 +387,40 @@ and <a href="https://github.com/boonproject/boon/wiki/Boon-JSON-in-five-minutes"
 
 <p>Boon supports LAX JSON (Json with comments, and you do not need to quote
 the field).</p>
+
+<h4>
+<a id="working-with-javatimeduration" class="anchor" href="#working-with-javatimeduration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with java.time.Duration</h4>
+
+<ul>
+<li>
+<code>getDuration(path)</code> get a duration</li>
+<li>
+<code>getDurationList(path)</code> get a duration list</li>
+</ul>
+
+<p>Konf supports "10 seconds" style config for duration as well as
+having built-in functions and support for ISO-8601. See documentation 
+for <a href="https://github.com/advantageous/konf/wiki/Working-with-Durations">duration config</a>
+for more details.</p>
+
+<p>Konf can reads list of numbers. </p>
+
+<ul>
+<li>
+<code>getIntList</code> reads list of ints</li>
+<li>
+<code>getLongList</code> reads list of longs</li>
+<li>
+<code>getDoubleList</code> reads list of doubles</li>
+<li>
+<code>getFloatList</code> reads list of floats</li>
+</ul>
+
+<p>See documentation <a href="https://github.com/advantageous/konf/wiki/Working-with-lists-of-ints,-longs,-doubles,">list of number configuration</a> 
+for more details.</p>
+
+<h4>
+<a id="thanks" class="anchor" href="#thanks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Thanks</h4>
 
 <p>If you like our configuration project, please try our 
 <a href="https://github.com/advantageous/reakt">Reactive Java project</a>
