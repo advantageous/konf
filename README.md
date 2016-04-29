@@ -356,7 +356,10 @@ the field).
 
 #### Working with java.time.Duration
 
-Konf supports "10 seconds" style conifg for duration as well as
+* `getDuration(path)` get a duration
+* `getDurationList(path)` get a duration list
+
+Konf supports "10 seconds" style config for duration as well as
 having built-in functions and support for ISO-8601. See documentation 
 for [duration config](https://github.com/advantageous/konf/wiki/Working-with-Durations)
 for more details.
