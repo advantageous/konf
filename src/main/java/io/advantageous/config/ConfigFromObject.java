@@ -1,16 +1,15 @@
 package io.advantageous.config;
 
 import io.advantageous.boon.core.Conversions;
+import io.advantageous.boon.core.Sets;
+import io.advantageous.boon.core.Value;
 import io.advantageous.boon.core.reflection.Mapper;
 import io.advantageous.boon.core.reflection.MapperSimple;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -40,6 +39,9 @@ class ConfigFromObject implements Config {
             DAYS, asList("days", "day", "d")
     );
 
+    private final Set<String> TRUE = Sets.set("yes", "true", "on");
+    private final Set<String> FALSE = Sets.set("no", "false", "off");
+
     <T> ConfigFromObject(T object) {
         this.root = object;
     }
@@ -58,6 +60,46 @@ class ConfigFromObject implements Config {
     public int getInt(String path) {
         validatePath(path);
         return ((Number) findProperty(root, path)).intValue();
+    }
+
+
+    @Override
+    public List<Boolean> getBooleanList(String path) {
+        validatePath(path);
+        final Object value = findProperty(root, path);
+        final Object object = extractListFromScriptObjectMirror(path, value, Object.class);
+        final List<Object> list = (List) object;
+        return list.stream().map(o -> convertObjectToBoolean(path, o)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean getBoolean(String path) {
+        validatePath(path);
+        final Object property = findProperty(root, path);
+        return convertObjectToBoolean(path, property);
+    }
+
+    private boolean convertObjectToBoolean(String path, Object property) {
+        if (!(property instanceof Boolean) && !(property instanceof CharSequence) && !(property instanceof Value)) {
+            throw new IllegalArgumentException("Path " + path + " must resolve to a boolean like type value = \""
+                    + property + "/");
+        }
+        if (property instanceof Boolean) {
+            return (Boolean) property;
+        }
+        if (property instanceof Value) {
+            return ((Value) property).booleanValue();
+        }
+
+        final String propValue = property.toString();
+        if (TRUE.contains(propValue)) {
+            return true;
+        } else if (FALSE.contains(propValue)) {
+            return false;
+        } else {
+            throw new IllegalArgumentException("Path " + path + " must resolve to a boolean like type value = \""
+                    + propValue + "/");
+        }
     }
 
     @Override

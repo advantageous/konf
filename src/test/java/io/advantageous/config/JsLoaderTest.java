@@ -153,6 +153,16 @@ public class JsLoaderTest {
         assertEquals(Duration.ofMillis(10), config.getDuration("tenMilliseconds2"));
         assertEquals(asList(Duration.ofSeconds(10)), config.getDurationList("durationList"));
 
+
+    }
+
+    @Test
+    public void testBoolean() {
+
+        /* Just make sure it does not throw an exception. */
+        config.getBoolean("macOS");
+        config.getBoolean("windows");
+
     }
 
     @SuppressWarnings("unused")

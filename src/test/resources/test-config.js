@@ -45,5 +45,10 @@ var config = {
   tenDays2: "10 day",
   tenMillis2: "10ms",
   tenMilliseconds2: milliseconds(10),
-  durationList: [seconds(10)]
+  durationList: [seconds(10)],
+  macOS : isMacOS(),
+  windows : isWindowsOS(),
+  linux : isLinux(),
+  unix : isUnix(),
+  solaris : isSolaris()
 };

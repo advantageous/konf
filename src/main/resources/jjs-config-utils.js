@@ -56,8 +56,15 @@ function isMacOS() {
 }
 
 function isUnix() {
-  return (konf.osNameInternal.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+  var OS = konf.osNameInternal;
+  return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
 }
+
+
+function isLinux() {
+  return konf.osNameInternal.indexOf("linux") >= 0;
+}
+
 
 function  isSolaris() {
   return (konf.osNameInternal.indexOf("sunos") >= 0);

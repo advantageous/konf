@@ -30,13 +30,28 @@ public interface Config {
     boolean hasPath(String path);
 
     /**
-     * Get float at location
+     * Get int at location
      *
      * @param path path to property.
      * @return value
      */
     int getInt(String path);
 
+    /**
+     * Get boolean at location
+     *
+     * @param path path to property.
+     * @return value
+     */
+    boolean getBoolean(String path);
+
+
+    /**
+     * get a boolean list
+     * @param path path to boolean list
+     * @return boolean list
+     */
+    List<Boolean> getBooleanList(String path);
 
     /**
      * Get float at location
