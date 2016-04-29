@@ -44,5 +44,6 @@ var config = {
   tenHours2: "10 h",
   tenDays2: "10 day",
   tenMillis2: "10ms",
-  tenMilliseconds2: milliseconds(10)
+  tenMilliseconds2: milliseconds(10),
+  durationList: [seconds(10)]
 };

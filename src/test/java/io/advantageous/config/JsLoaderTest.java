@@ -123,13 +123,6 @@ public class JsLoaderTest {
         ConfigLoader.load("bad-config.js");
     }
 
-    @SuppressWarnings("unused")
-    private static class Employee {
-        private String id;
-        private String name;
-    }
-
-
     @Test(expected = IllegalArgumentException.class)
     public void wrongTypeInList() {
         assertEquals(asList(1, 2, 3), config.getIntList("intsWrongType"));
@@ -140,7 +133,6 @@ public class JsLoaderTest {
     public void listHasNull() {
         assertEquals(asList(1, 2, 3), config.getIntList("intsNull"));
     }
-
 
     @Test
     public void testDuration() {
@@ -159,7 +151,14 @@ public class JsLoaderTest {
         assertEquals(Duration.ofDays(10), config.getDuration("tenDays2"));
         assertEquals(Duration.ofMillis(10), config.getDuration("tenMillis2"));
         assertEquals(Duration.ofMillis(10), config.getDuration("tenMilliseconds2"));
+        assertEquals(asList(Duration.ofSeconds(10)), config.getDurationList("durationList"));
 
+    }
+
+    @SuppressWarnings("unused")
+    private static class Employee {
+        private String id;
+        private String name;
     }
 
 }

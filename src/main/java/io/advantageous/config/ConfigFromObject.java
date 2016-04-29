@@ -87,10 +87,12 @@ class ConfigFromObject implements Config {
     @Override
     public Duration getDuration(final String path) {
         validatePath(path);
-
         final Object value = findProperty(root, path);
+        return convertObjectToDuration(path, value);
+    }
 
-        /* It is already a duration so just return it. */
+    private Duration convertObjectToDuration(String path, Object value) {
+    /* It is already a duration so just return it. */
         if (value instanceof Duration) {
             return (Duration) value;
         }
@@ -99,8 +101,20 @@ class ConfigFromObject implements Config {
         if (value instanceof Number) {
             return Duration.ofMillis(((Number) value).longValue());
         }
+        return convertStringToDuration(path, value);
+    }
 
-        /* It is some sort of string like thing. */
+    @Override
+    public List<Duration> getDurationList(String path) {
+        validatePath(path);
+        final Object value = findProperty(root, path);
+        final Object object = extractListFromScriptObjectMirror(path, value, Object.class);
+        final List<Object> list = (List) object;
+        return list.stream().map(o -> convertObjectToDuration(path, o)).collect(Collectors.toList());
+    }
+
+    private Duration convertStringToDuration(final String path, final Object value) {
+    /* It is some sort of string like thing. */
         if (value instanceof CharSequence) {
             final String durationString = value.toString(); //Make it an actual string.
             /* try to parse it as a ISO-8601 duration format. */

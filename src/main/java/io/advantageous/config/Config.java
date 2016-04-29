@@ -72,6 +72,14 @@ public interface Config {
     Duration getDuration(String path);
 
     /**
+     * Get Duration at location
+     *
+     * @param path path to property.
+     * @return value
+     */
+    List<Duration> getDurationList(String path);
+
+    /**
      * Get list of strings at location
      *
      * @param path path to list of strings.
