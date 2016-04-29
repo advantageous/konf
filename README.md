@@ -118,6 +118,16 @@ public interface Config {
 
     /**  Get a list of POJOs. */
     <T> List<T> getList(String path, Class<T> componentType);
+    
+    /** Get duration. Good for timeouts */
+    Duration getDuration(String path);
+    
+    /** Get duration list. */
+    List<Duration> getDurationList(String path);
+    
+    /** Get int list. */
+    List<Integer> getIntegerList(String path);
+    ...
 }
 
 ```
@@ -284,24 +294,23 @@ You can read a list of POJOs at once.
 ```
 
 You can also read a list of config objects out of the config as well.
+
 #### Reading a config list directly out of the config file
 ```java
 
-    @Test
-    public void testReadListOfConfig() throws Exception {
         final List<Config> employees = config.getConfigList("employees");
         assertEquals("Geoff", employees.get(0).getString("name"));
         assertEquals("123", employees.get(0).getString("id"));
-    }
- ```
- 
- ## Using Config with YAML
+```
+
+## Using Config with YAML
  
  First include a YAML to object parser like [YAML Beans](https://github.com/EsotericSoftware/yamlbeans)
  or a library like this.
  
- #### Example YAML
- ```yaml
+#### Example YAML
+ 
+ ```javascript
    name: Nathan Sweet
      age: 28
      address: 4011 16th Ave S
@@ -315,7 +324,6 @@ You can also read a list of config objects out of the config as well.
 #### Using Konf with YAML
  
 ```java
-
 //Use YamlReader to load YAML file.
 YamlReader reader = new YamlReader(new FileReader("contact.yml"));
 
