@@ -354,6 +354,27 @@ String address = config.getString("address");
 Boon supports LAX JSON (Json with comments, and you do not need to quote
 the field).
 
+#### Working with java.time.Duration
+
+Konf supports "10 seconds" style conifg for duration as well as
+having built-in functions and support for ISO-8601. See documentation 
+for [duration config](https://github.com/advantageous/konf/wiki/Working-with-Durations)
+for more details.
+
+##### 
+
+Konf can reads list of numbers. 
+
+* `getIntList` reads list of ints
+* `getLongList` reads list of longs
+* `getDoubleList` reads list of doubles
+* `getFloatList` reads list of floats
+
+See documentation [list of number configuration](https://github.com/advantageous/konf/wiki/Working-with-lists-of-ints,-longs,-doubles,) 
+for more details.
+
+
+#### Thanks
 
 If you like our configuration project, please try our 
 [Reactive Java project](https://github.com/advantageous/reakt)
