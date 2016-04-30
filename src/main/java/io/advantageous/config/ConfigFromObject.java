@@ -7,6 +7,7 @@ import io.advantageous.boon.core.reflection.Mapper;
 import io.advantageous.boon.core.reflection.MapperSimple;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -58,9 +59,8 @@ class ConfigFromObject implements Config {
 
     @Override
     public int getInt(String path) {
-        validateNumberInPath(path);
-        findProperty(root, path);
-        return ((Number) findProperty(root, path)).intValue();
+        Object value = validateNumberInPath(path);
+        return ((Number) value).intValue();
     }
 
 
@@ -115,16 +115,29 @@ class ConfigFromObject implements Config {
         }
     }
 
-    private void validateNumberInPath(String path) {
+    private Number validateNumberInPath(String path) {
         Object object = findProperty(root, path);
 
         if (object == null) {
             throw new IllegalArgumentException("Path or property " + path + " does not exist");
         }
 
-        if (! (object instanceof Number)) {
-            throw new IllegalArgumentException("Path or property " + path + " exists but is not a number");
+        if (object instanceof CharSequence) {
+            try {
+                return new BigDecimal(object.toString());
+            } catch (Exception ex) {
+                throw new IllegalArgumentException("Path or property " + path + " exists but is not a number value ="
+                        + object);
+            }
         }
+
+        if (!(object instanceof Number)) {
+            throw new IllegalArgumentException("Path or property " + path + " exists but is not a number value ="
+                    + object);
+        }
+
+
+        return (Number) object;
     }
 
     @Override

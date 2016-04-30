@@ -165,6 +165,26 @@ public class JsLoaderTest {
 
     }
 
+
+    @Test
+    public void testParseInt() {
+
+        /* Just make sure it does not throw an exception. */
+        final int parseInt = config.getInt("parseInt");
+        assertEquals(123, parseInt);
+
+    }
+
+    @Test
+    public void testStringNumber() {
+
+        /* Just make sure it does not throw an exception. */
+        final int parseInt = config.getInt("stringNumber");
+        assertEquals(123, parseInt);
+
+    }
+
+
     @SuppressWarnings("unused")
     private static class Employee {
         private String id;

@@ -50,5 +50,8 @@ var config = {
   windows : isWindowsOS(),
   linux : isLinux(),
   unix : isUnix(),
-  solaris : isSolaris()
+  solaris : isSolaris(),
+  parseInt : parseInt("123"),
+  stringNumber : "123"
 };
+
