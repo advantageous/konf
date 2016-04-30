@@ -58,7 +58,8 @@ class ConfigFromObject implements Config {
 
     @Override
     public int getInt(String path) {
-        validatePath(path);
+        validateNumberInPath(path);
+        findProperty(root, path);
         return ((Number) findProperty(root, path)).intValue();
     }
 
@@ -104,13 +105,25 @@ class ConfigFromObject implements Config {
 
     @Override
     public float getFloat(String path) {
-        validatePath(path);
+        validateNumberInPath(path);
         return ((Number) findProperty(root, path)).floatValue();
     }
 
     private void validatePath(String path) {
         if (findProperty(root, path) == null) {
             throw new IllegalArgumentException("Path or property " + path + " does not exist");
+        }
+    }
+
+    private void validateNumberInPath(String path) {
+        Object object = findProperty(root, path);
+
+        if (object == null) {
+            throw new IllegalArgumentException("Path or property " + path + " does not exist");
+        }
+
+        if (! (object instanceof Number)) {
+            throw new IllegalArgumentException("Path or property " + path + " exists but is not a number");
         }
     }
 
@@ -122,7 +135,7 @@ class ConfigFromObject implements Config {
 
     @Override
     public long getLong(String path) {
-        validatePath(path);
+        validateNumberInPath(path);
         return ((Number) findProperty(root, path)).longValue();
     }
 
