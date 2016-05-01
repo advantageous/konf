@@ -94,7 +94,7 @@ You can also use:
 * `getInt(path)` 
 * `getLong(path)`
 * `getDouble(path)`
-* `getBoolean(path)`
+* `getBoolean(path)` can be true, false, "yes", "no", "on", "off", yes, no, off, on
 * `getString(path)`
 * `getStringList(path)` gets a list of strings
 * `getConfig(path)` gets a sub-config.
@@ -180,7 +180,7 @@ The `getX` methods work like you would expect. Given this config file.
 * `java.time.Duration` is imported as `duration` 
 *  `java.lang.System` is imported as `system`  
 * `seconds(units)`, `minutes(units)`, `hours(units)`, `days(units)`, `millis(units)` and `milliseconds(units`) define a `Duration` which is useful for configuring timeouts and interval jobs
-
+* constants `yes`, `no`, `on`, `off` for boolean config
 
 #### Sample config for testing and showing how config works
 

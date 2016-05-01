@@ -3,6 +3,11 @@ var uri = Java.type("java.net.URI").create;
 var system = Java.type("java.lang.System");
 var duration = Java.type("java.time.Duration");
 
+var yes = true;
+var on = true;
+var no = false;
+var off = false;
+
 /** To store private vars. */
 var konf = {
   osNameInternal : system.getProperty("os.name").toLowerCase()

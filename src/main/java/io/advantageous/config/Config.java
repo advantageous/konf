@@ -1,5 +1,6 @@
 package io.advantageous.config;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,23 @@ import java.util.Map;
  * @author Geoff Chandler
  */
 public interface Config {
+
+
+    /**
+     * Get a URI at location
+     *
+     * @param path path
+     * @return string at location./
+     */
+    URI getUri(String path);
+
+    /**
+     * Get a URI at location
+     *
+     * @param path path
+     * @return string at location./
+     */
+    List<URI> getUriList(String path);
 
 
     /**

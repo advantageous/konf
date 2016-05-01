@@ -98,7 +98,7 @@ public class ConfigImplTest {
     public void testReadListOfConfig() throws Exception {
         final List<Config> employees = config.getConfigList("employees");
         assertEquals("Geoff", employees.get(0).getString("name"));
-        assertEquals("123", employees.get(0).getString("id"));
+        assertEquals(123, employees.get(0).getInt("id"));
     }
 
     @Test
