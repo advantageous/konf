@@ -106,7 +106,7 @@ You can also use:
 * `getBooleanList(path)`
 * `getDuration(path)` gets `java.time.Duration` useful for timeouts
 * `getDurationList(path)` gets duration list
-* `getURripath)` gets `java.net.URI` useful for connecting to downstream services
+* `getUripath)` gets `java.net.URI` useful for connecting to downstream services
 * `getUriList(path)` useful for connecting to downstream services
 
 
