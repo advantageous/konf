@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 public class JsLoadTest {
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void loadDontExist() {
         ConfigLoader.load("crapthatdontexist");
     }

@@ -10,7 +10,7 @@ var off = false;
 
 /** To store private vars. */
 var konf = {
-  osNameInternal : system.getProperty("os.name").toLowerCase()
+  osNameInternal: system.getProperty("os.name").toLowerCase()
 };
 
 function dockerHostOrDefault(defaultHost) {
@@ -71,6 +71,6 @@ function isLinux() {
 }
 
 
-function  isSolaris() {
+function isSolaris() {
   return (konf.osNameInternal.indexOf("sunos") >= 0);
 }

@@ -57,7 +57,7 @@ public class ConfigLoader {
 
     private static void loadResources(ScriptEngine engine, String[] resources) {
         for (final String resource : resources) {
-            try (final InputStream resource1 = findResource(resource)){
+            try (final InputStream resource1 = findResource(resource)) {
                 engine.eval(new InputStreamReader(resource1));
             } catch (final Exception e) {
                 throw new IllegalArgumentException("unable to execute javascript. " + resource, e);

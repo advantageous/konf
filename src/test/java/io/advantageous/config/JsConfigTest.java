@@ -220,52 +220,52 @@ public class JsConfigTest {
         assertEquals(8082, uriList.get(2).getPort());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testBadUri() {
 
         config.getUri("badUri");
     }
 
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testBadUri2() {
 
         config.getUri("badUri2");
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void badInt() {
 
         final Integer badInt = config.getInt("badInt");
         System.out.println("BAD INT " + badInt);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void badBoolean() {
 
         config.getBoolean("badBoolean");
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void badBoolean2() {
 
         config.getBoolean("badBoolean2");
     }
 
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void badDuration() {
 
         config.getDuration("badDuration");
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void badDuration2() {
 
         config.getDuration("badDuration2");
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void badDuration3() {
 
         config.getDuration("badDuration3");
@@ -277,7 +277,6 @@ public class JsConfigTest {
         final Duration durationMillis = config.getDuration("durationMillis");
         assertEquals(Duration.ofMillis(123), durationMillis);
     }
-
 
 
     //

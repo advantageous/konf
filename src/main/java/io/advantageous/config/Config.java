@@ -66,6 +66,7 @@ public interface Config {
 
     /**
      * get a boolean list
+     *
      * @param path path to boolean list
      * @return boolean list
      */
