@@ -3,8 +3,9 @@ package io.advantageous.config;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URI;
+import java.net.URL;
 
 import static java.lang.Thread.currentThread;
 
@@ -45,18 +46,17 @@ public class ConfigLoader {
         try {
 
             final InputStream resourceAsStream = findResource("jjs-config-utils.js");
-
-
             engine.eval(new InputStreamReader(resourceAsStream));
 
             for (final String resource : resources) {
                 try {
-                    engine.eval(new InputStreamReader(
-                            currentThread().getContextClassLoader().getResourceAsStream(resource)));
+                    final InputStream resource1 = findResource(resource);
+                    engine.eval(new InputStreamReader(resource1));
                 } catch (final Exception e) {
                     throw new IllegalArgumentException("unable to execute javascript. " + resource, e);
                 }
             }
+
         } catch (final ScriptException e) {
             throw new IllegalArgumentException("unable to execute javascript.", e);
         }
@@ -68,8 +68,32 @@ public class ConfigLoader {
         if (resourceAsStream == null) {
             resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         }
+
         if (resourceAsStream == null) {
-            throw new IllegalArgumentException("base resources could not be loaded " + resourceName);
+            final URI uri = URI.create(resourceName);
+            if (uri.getScheme().equals("file")) {
+                try {
+                    resourceAsStream = new FileInputStream(new File(uri.getPath()));
+                } catch (FileNotFoundException e) {
+                    throw new IllegalArgumentException("File resource could not be loaded " + resourceName);
+                }
+            } else if (uri.getScheme().equals("http")) {
+                try {
+                    URL url = uri.toURL();
+                    resourceAsStream = url.openStream();
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("Web resource could not be loaded " + resourceName);
+                }
+            } else if (uri.getScheme().equals("classpath")) {
+                resourceAsStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceName);
+                if (resourceAsStream == null) {
+                    resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+                }
+            }
+        }
+
+        if (resourceAsStream == null) {
+            throw new IllegalArgumentException("resources could not be loaded " + resourceName);
         }
 
         return resourceAsStream;
