@@ -238,6 +238,27 @@ First we load the config.
     }
 ```
 
+Note that `ConfigLoader.load` takes a variable length string array.
+By default a resource String can contain a valid URI, which 
+can have the scheme `classpath`, `file`, or `http`. If you do not specify
+a scheme than the path is assumed to be a classpath resource. 
+
+#### Using different resources
+
+```java
+        config = ConfigLoader.load(
+                      "/io/mycompany/foo-classpath.js",
+                      "classpath:test-config.js",
+                      "classpath://foo.js",
+                      "classpath:/bar.js",
+                      "file://opt/app/config.js",
+                      "file:///opt/app/config2.js",
+                      "file:/opt/app/config.js",
+                      "http://my.internal.server:9090/foo.js"
+                      );
+
+```
+
 Then we show reading basic types with the `config` object using `getX`.
 
 #### Reading basic types from config

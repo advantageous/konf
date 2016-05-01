@@ -7,8 +7,6 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 
-import static java.lang.Thread.currentThread;
-
 /**
  * Javascript configuration loader.
  *
@@ -43,24 +41,28 @@ public class ConfigLoader {
      */
     public static Config load(final String... resources) {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        try {
-
-            final InputStream resourceAsStream = findResource("jjs-config-utils.js");
+        try (final InputStream resourceAsStream = findResource("jjs-config-utils.js")) {
             engine.eval(new InputStreamReader(resourceAsStream));
-
-            for (final String resource : resources) {
-                try {
-                    final InputStream resource1 = findResource(resource);
-                    engine.eval(new InputStreamReader(resource1));
-                } catch (final Exception e) {
-                    throw new IllegalArgumentException("unable to execute javascript. " + resource, e);
-                }
+            loadResources(engine, resources);
+        } catch (final ScriptException se) {
+            throw new IllegalArgumentException("unable to execute main javascript.", se);
+        } catch (final Exception ex) {
+            if (ex instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) ex;
             }
-
-        } catch (final ScriptException e) {
-            throw new IllegalArgumentException("unable to execute javascript.", e);
+            throw new IllegalArgumentException("unable to load main resource ", ex);
         }
         return loadFromObject(engine.get("config"));
+    }
+
+    private static void loadResources(ScriptEngine engine, String[] resources) {
+        for (final String resource : resources) {
+            try (final InputStream resource1 = findResource(resource)){
+                engine.eval(new InputStreamReader(resource1));
+            } catch (final Exception e) {
+                throw new IllegalArgumentException("unable to execute javascript. " + resource, e);
+            }
+        }
     }
 
     private static InputStream findResource(final String resourceName) {
@@ -73,7 +75,8 @@ public class ConfigLoader {
             final URI uri = URI.create(resourceName);
             if (uri.getScheme().equals("file")) {
                 try {
-                    resourceAsStream = new FileInputStream(new File(uri.getPath()));
+                    final String path = uri.getPath();
+                    resourceAsStream = new FileInputStream(new File(path));
                 } catch (FileNotFoundException e) {
                     throw new IllegalArgumentException("File resource could not be loaded " + resourceName);
                 }
@@ -85,9 +88,15 @@ public class ConfigLoader {
                     throw new IllegalArgumentException("Web resource could not be loaded " + resourceName);
                 }
             } else if (uri.getScheme().equals("classpath")) {
-                resourceAsStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceName);
+                String path = uri.getSchemeSpecificPart();
+                if (path.startsWith("//")) {
+                    path = path.substring(2);
+                } else if (path.startsWith("/")) {
+                    path = path.substring(1);
+                }
+                resourceAsStream = ConfigLoader.class.getClassLoader().getResourceAsStream(path);
                 if (resourceAsStream == null) {
-                    resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+                    resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
                 }
             }
         }
