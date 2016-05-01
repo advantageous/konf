@@ -55,21 +55,56 @@ var config = {
   }
 
 };
-
 ```
 
-The interface for Konf is Config.
+## Defining your own DSL
+
+You can define you own config DSL for your environment. 
+We have a [full example that shows you how to create a custom config DSL](https://github.com/advantageous/konf/wiki/Config-Logic---creating-your-own-config-DSL)
+for your internal projects. The example uses Mesosphere and Docker PORT 
+look ups and it is from a real project. 
+
+#### Defining your own config DSL
+```javascript
+var config = {
+
+  platform: {
+
+    statsd: "udp://" + getDockerHost() + ":8125",
+
+    servicePort: mesosPortAt(0, 8080),
+    adminPort: mesosPortAt(1, 9090),
+    ...
+```
+
+See the real world for [example that uses Konf to find ports under
+Mesosphere](https://github.com/advantageous/konf/wiki/Config-Logic---creating-your-own-config-DSL) 
+(running in stating or prod) or under Docker (running on 
+a local developers box). 
+
+
+## Java interface for Konf is Config.
+
+
+The Java interface for Konf is Config.
 You can get a sub Config from Config (`getConfig(path)`).
 The `path` is always in dot notation (`this.that.foo.bar`).
 You can also use:
+* `hasPath(path)`
 * `getInt(path)` 
 * `getLong(path)`
 * `getDouble(path)`
+* `getBoolean(path)`
 * `getString(path)`
 * `getStringList(path)` gets a list of strings
 * `getConfig(path)` gets a sub-config.
 * `getMap(path)` gets a map which is a sub-config.
 * `getConfigList(path)` gets a list of configs at the location specified.
+* `getIntList(path)` 
+* `getLongList(path)`
+* `getDoubleList(path)`
+* `getBooleanList(path)`
+
 
 `getMap` works with JavaScript objects. `getStringList` and `getConfigList` works
 with JavaScript array of string and a JavaScript array of JavaScript objects. 
@@ -132,8 +167,20 @@ public interface Config {
 
 ```
 
-
 The `getX` methods work like you would expect. Given this config file.
+
+## JavaScript functions for config
+
+#### JavaScript functions that we support
+* `sysProp(propName)` to read a sysProp as in `fooSize : sysProp("my.foo.size")`
+* `sysPropOrDefault(propName, defaultValue)` to read a sysProp or a default
+* `isWindowsOS()`, `isMacOS()`, `isUnix()`, `isLinux()`, `isSolaris()` 
+* `env()` as in `fooSize : env('MY_FOO_SIZE')` or even `fooSize : sysPropOrDefault("my.foo.size", env('MY_FOO_SIZE'))`
+* `uri()` which creates a `java.net.URI` as in `fooURI : uri ("http://localhost:8080/")` 
+* `java.time.Duration` is imported as `duration` 
+*  `java.lang.System` is imported as `system`  
+* `seconds(units)`, `minutes(units)`, `hours(units)`, `days(units)`, `millis(units)` and `milliseconds(units`) define a `Duration` which is useful for configuring timeouts and interval jobs
+
 
 #### Sample config for testing and showing how config works
 
@@ -169,6 +216,7 @@ var config = {
 };
 
 ```
+
 
 We can do the following operations. 
 
