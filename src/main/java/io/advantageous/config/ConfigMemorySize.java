@@ -2,7 +2,6 @@ package io.advantageous.config;
 
 /**
  * An immutable class representing an amount of memory.
- *
  */
 public class ConfigMemorySize {
 
@@ -12,6 +11,16 @@ public class ConfigMemorySize {
     ConfigMemorySize(MemorySizeUnit memorySizeUnit, long amount) {
         this.memorySizeUnit = memorySizeUnit;
         this.amount = amount;
+    }
+
+    /**
+     * Parse the value and returns a ConfigMemorySize
+     *
+     * @param value value of string
+     * @return value of ConfigMemorySize
+     */
+    public static ConfigMemorySize valueOf(final String value) {
+        return MemorySizeUnit.parseToConfigMemorySize(value);
     }
 
     public long toBytes() {
@@ -43,14 +52,5 @@ public class ConfigMemorySize {
                 "memorySizeUnit=" + memorySizeUnit +
                 ", amount=" + amount +
                 '}';
-    }
-
-    /**
-     * Parse the value and returns a ConfigMemorySize
-     * @param value value of string
-     * @return value of ConfigMemorySize
-     */
-    public static ConfigMemorySize valueOf(final String value) {
-        return MemorySizeUnit.parseToConfigMemorySize(value);
     }
 }

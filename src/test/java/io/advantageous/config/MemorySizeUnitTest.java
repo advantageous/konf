@@ -2,7 +2,7 @@ package io.advantageous.config;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by rick on 5/1/16.
