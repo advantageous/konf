@@ -4,6 +4,8 @@
 Java configuration library similar in concept to TypeSafe config,
 but uses full YAML or JSON or JavaScript for configuration (and more).
 
+You can also mix and match TypeSafe Config.
+
 Konf allows you to easily create your own config DSLs.
 
 
@@ -517,6 +519,7 @@ String address = config.getString("address");
 Boon supports LAX JSON (Json with comments, and you do not need to quote
 the field).
 
+
 #### Working with java.time.Duration
 
 * `getDuration(path)` get a duration
@@ -638,6 +641,64 @@ gets read before the value `abcFallback` which is in `reference.js`.
 Yet the `def` key yields the `"def"` because it is defined in `reference.js`
 but not `test-config.js`. You can implement the same style config reading and
 fallback as is in Type Safe Config but with your DSL.
+
+
+#### Using Konf with Typesafe Config
+
+This allows you to combine TypeSafe `Config` and Konf `Config`.
+You can have TypeSafe config be a fallback for Konf or the other way around.
+
+
+You can load TypeSafe `Config` as a Konf `Config` instance as follows:
+
+#### Loading Typesafe config as a Konf Config object
+```java
+
+        Config config = TypeSafeConfig.typeSafeConfig();
+        final String abc = config.getString("abc");
+        assertEquals("abc", abc);
+```
+
+You can also chain TypeSafe config as fallback or Konf `Config` as a fallback
+for TypeSafe `Config` as follows:
+
+
+#### Konf as a fallback for TypeSafe config. 
+
+```java
+
+
+import static io.advantageous.config.ConfigLoader.config;
+import static io.advantageous.config.ConfigLoader.configs;
+import static io.advantageous.config.ConfigLoader.load;
+
+...
+
+    Config config;
+    ...
+        config = configs(TypeSafeConfig.typeSafeConfig(), config("test-config.js"));
+```
+
+#### TypeSafe config as a fallback for Konf. 
+
+```java
+
+
+import static io.advantageous.config.ConfigLoader.config;
+import static io.advantageous.config.ConfigLoader.configs;
+import static io.advantageous.config.ConfigLoader.load;
+
+...
+
+    Config config;
+    ...
+        config = configs(config("test-config.js"), TypeSafeConfig.typeSafeConfig());
+```
+
+You can convert any TypeSafe `Config` into a Konf `Config` by using
+ `TypeSafeConfig.fromTypeSafeConfig(typeSafeConfig)`.
+ 
+Find out more about TypeSafe config support at [Konf TypeSafe config](http://advantageous.github.io/konf-typesafe-config/).
 
 #### Thanks
 
