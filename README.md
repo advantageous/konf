@@ -265,7 +265,8 @@ The `getX` methods work like you would expect. Given this config file.
 * `seconds(units)`, `minutes(units)`, `hours(units)`, `days(units)`, `millis(units)` and `milliseconds(units`) define a `Duration` which is useful for configuring timeouts and interval jobs
 * constants `yes`, `no`, `on`, `off` for boolean config
 * `load(resources...)` load a config
-* `configs` chain a group of configs
+* `configs(config...)` chain a group of configs
+* `bytes(units)`, `kilobytes(units)`, `megabytes(units)`, `gigabytes(units)` to read sizes
 
 #### Sample config for testing and showing how config works
 
