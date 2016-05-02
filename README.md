@@ -2,13 +2,10 @@
 
 # Konf - Typed Java Config system 
 Java configuration library similar in concept to TypeSafe config,
-but uses full JavaScript, YAML or JSON for configuration.
+but uses full YAML or JSON or JavaScript for configuration (and more).
 
-Uses JavaScript/JSON/YAML as config for Java. 
+Konf allows you to easily create your own config DSLs.
 
-You can use full JavaScript for configuration as long as you define a
-variable called `config` that results in a JavaScript object which
-equates to a Java map.
 
 ## Using Konf on your project
 
@@ -56,6 +53,11 @@ var config = {
 
 };
 ```
+
+You can use full JavaScript for configuration as long as you define a
+variable called `config` that results in a JavaScript object which
+equates to a Java map. 
+
 
 ## Defining your own DSL
 
@@ -616,6 +618,11 @@ You could run this test.
 #### Testing the reference.js is a fallback for test-config.js.
 
 ```java
+
+import static io.advantageous.config.ConfigLoader.*;
+...
+
+        config = configs(config("test-config.js"), config("reference.js"));
 
         final String value = config.getString("abc");
         assertEquals("abc", value);
