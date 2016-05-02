@@ -2,11 +2,21 @@
 
 # Konf - Typed Java Config system 
 Java configuration library similar in concept to TypeSafe config,
-but uses full YAML or JSON or JavaScript for configuration (and more).
+but uses full 
+
+* YAML 
+* JSON
+* JSON Lax
+* JavaScript (useful to create Config DSLs, and basic config logic)
+* Java Pojos (Pojos, Lists, Maps, basic types)
+* TypeSafe Config
+* Java properties
 
 You can also mix and match TypeSafe Config.
 
-Konf allows you to easily create your own config DSLs.
+***Konf*** allows you to easily create your own 
+[config DSLs](https://github.com/advantageous/konf/wiki/Config-Logic---creating-your-own-config-DSL) 
+something that is not possible with ***TypeSafe Config***.
 
 
 ## Using Konf on your project
