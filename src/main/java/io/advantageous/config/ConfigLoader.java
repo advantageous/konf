@@ -40,7 +40,7 @@ public class ConfigLoader {
      *
      * @return chain of configs as a single config. Left side is most significant.
      */
-    public static Config configWithFallbacks(final Config... configs) {
+    public static Config configWithFallbacks(final Config[] configs) {
         return new Configs(configs);
     }
 
