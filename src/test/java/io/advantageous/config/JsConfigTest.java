@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
+import static io.advantageous.config.ConfigLoader.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
@@ -20,7 +21,7 @@ public class JsConfigTest {
 
     @Before
     public void setUp() throws Exception {
-        config = ConfigLoader.load("test-config.js");
+        config = configs(config("test-config.js"), config("reference.js"));
     }
 
     @Test
@@ -109,7 +110,7 @@ public class JsConfigTest {
 
     @Test
     public void testLoadConfig() throws Exception {
-        Config config = ConfigLoader.load("test-config.js");
+        Config config = load("test-config.js");
         URI uri = config.get("myUri", URI.class);
         Assert.assertNotNull(uri);
         Assert.assertEquals("host", uri.getHost());
@@ -120,7 +121,7 @@ public class JsConfigTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testBadJs() throws Exception {
-        ConfigLoader.load("bad-config.js");
+        load("bad-config.js");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -294,6 +295,15 @@ public class JsConfigTest {
         assertEquals(ConfigMemorySize.valueOf("10GB"), diskVolumes.get(1));
         assertEquals(ConfigMemorySize.valueOf("10GB"), diskVolumes.get(2));
         assertEquals(ConfigMemorySize.valueOf("10B"), diskVolumes.get(3));
+    }
+
+    @Test
+    public void fallback() {
+        final String value = config.getString("abc");
+        assertEquals("abc", value);
+
+        final String value1 = config.getString("def");
+        assertEquals("def", value1);
     }
 
     //

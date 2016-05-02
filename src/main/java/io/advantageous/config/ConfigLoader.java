@@ -34,6 +34,39 @@ public class ConfigLoader {
     }
 
     /**
+     * Creates a chain of configs.
+     * @param configs var args of configs. Searched from left to right so that the
+     *                left side overrides the right side.
+     *
+     * @return chain of configs as a single config. Left side is most significant.
+     */
+    public static Config configWithFallbacks(final Config... configs) {
+        return new Configs(configs);
+    }
+
+    /**
+     * Alias for `configWithFallbacks`.
+     * Creates a chain of configs.
+     * @param configs var args of configs. Searched from left to right so that the
+     *                left side overrides the right side.
+     *
+     * @return chain of configs as a single config. Left side is most significant.
+     */
+    public static Config configs(final Config... configs) {
+        return configWithFallbacks(configs);
+    }
+
+    /**
+     * Alias for `load`. Loads a config file.
+     *
+     * @param resources classpath resources to from which to load javascript
+     * @return Config.
+     */
+    public static Config config(final String... resources) {
+        return load(resources);
+    }
+
+    /**
      * Loads a config file.
      *
      * @param resources classpath resources to from which to load javascript

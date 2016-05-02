@@ -476,7 +476,73 @@ We support the following size Strings.
 #### Supported size strings
 ```java
 
+public enum MemorySizeUnit {
+
+    BYTES(1, "B", "b", "byte", "bytes"),
+    KILO_BYTES(1_000, "kB", "kilobyte", "kilobytes"),
+    MEGA_BYTES(1_000_000, "MB", "megabyte", "megabytes"),
+    GIGA_BYTES(1_000_000_000, "GB", "gigabyte", "gigabytes"),
+    TERA_BYTES(1_000_000_000, "TB", "terabyte", "terabytes"),
+    PETA_BYTES(1_000_000_000_000L, "PB", "petabyte", "petabytes"),
+    EXA_BYTES(1_000_000_000_000_000L, "EB", "exabyte", "exabytes"),
+    ZETTA_BYTES(1_000_000_000_000_000_000L, "ZB", "zettabyte", "zettabytes");
+    
 ```
+
+## Loading config files with fallbacks
+
+#### 
+```java
+
+import static io.advantageous.config.ConfigLoader.*;
+...
+    private Config config;
+    ...
+        config = configs(config("test-config.js"), config("reference.js"));
+
+```
+
+You can load config. The `config` method is an alias for `load(resources...)`.
+The `configs(config...)` creates a series of configs where the configs
+are search from left to right. The first config that has the object (starting
+from the left or 0 index) will return the object. 
+
+Give the following two configs (from the above example).
+
+#### test-config.js
+```javascript
+var config = {
+  abc : "abc",
+```
+
+
+#### reference.js
+```javascript
+var config = {
+  abc : "abcFallback",
+  def : "def"
+}
+```
+
+You could run this test.
+
+#### Testing the reference.js is a fallback for test-config.js.
+
+```java
+
+        final String value = config.getString("abc");
+        assertEquals("abc", value);
+
+        final String value1 = config.getString("def");
+        assertEquals("def", value1);
+```
+
+You can load your config anyway you like. The String `abc` is found
+when looking up the key `abc` because it is in the `test-config.js` which
+gets read before the value `abcFallback` which is in `reference.js`.
+Yet the `def` key yields the `"def"` because it is defined in `reference.js`
+but not `test-config.js`. You can implement the same style config reading and
+fallback as is in Type Safe Config but with your DSL.
 
 #### Thanks
 
