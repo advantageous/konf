@@ -82,9 +82,84 @@ Mesosphere](https://github.com/advantageous/konf/wiki/Config-Logic---creating-yo
 (running in stating or prod) or under Docker (running on 
 a local developers box). 
 
+## Overview
 
+Overview
+
+* implemented in plain Java SDK almost no dependencies (sl4j, and reflekt with no others)
+* supports files in : YAML, JSON, JSON LAX, JavaScript, Java properties or any tree of Map/List basic types and POJOs
+* allows you to easily create your own config DSL
+* merges multiple configs across all formats
+* can load from configs, from classpath, http, file or just an Java Object tree
+* great support for "nesting" (treat any subtree of the config the same as the whole config)
+* users can override the config with Java system properties, java -Dmyapp.foo.bar=10 and sysProp 
+* users can override the config with OS environment variables
+* supports configuring an app, with its framework and libraries, all from a single file such as application.yaml
+* parses duration and size settings, "512k" or "10 seconds"
+* converts types, so if you ask for a boolean and the value is the string "yes", or you ask for a float and the value is an int, it will figure it out.
+* API based on immutable Config instances, for thread safety and easy reasoning about config transformations
+* extensive test coverage
+
+This library limits itself to config. 
+If you want to load config from a database or something, you would need 
+to write some custom code. The library has nice support for merging 
+configurations so if you build one from a custom source it's easy to merge it in.
+
+##  License
+
+The license is Apache 2.0.
+
+## Release Notes
+
+Please see [Release Notes](https://github.com/advantageous/konf/releases), and
+[Release Notes In Progress](https://github.com/advantageous/konf/wiki/Release-Notes-Draft)
+for the latest releases.
+
+## Build
+
+The build uses gradle and the tests are written in Java; and, 
+the library itself is plain Java.
+
+## Using the Library
+
+```java
+import io.advantageous.config.ConfigLoader;
+
+Config conf = ConfigLoader.load("myconfig.js", "reference.js");
+int bar1 = conf.getInt("foo.bar");
+Config foo = conf.getConfig("foo");
+int bar2 = foo.getInt("bar");
+```
+
+##  Longer Examples
+
+You can see longer examples in [tests](https://github.com/advantageous/konf/blob/master/src/test/java/io/advantageous/config/JsLoadTest.java)
+along with [sample config](https://github.com/advantageous/konf/blob/master/src/test/resources/test-config.js).
+You can run these examples by `git cloning` this project and `running gradle test`.
+
+In brief, as shown in the examples:
+
+You create a Config instance provided by your application.
+You use `ConfigLoader.load()` and you can define your own config system.
+You could setup default `reference.yaml` or `reference.json` but you don't have to.
+You could just load a single level of config. Config is as complex or as simple
+as you need. 
+
+A `Config` can be created with the parser methods in `ConfigLoader.load`
+ or built up from any POJO object tree or tree of Map/List/Pojos basic value.
+It is very flexible. Examples are shown below and linked to below that use
+  JSON, YAML and allow you to define your own `DSL` like config.
+It is very simple and easy to use. 
+
+##  Immutability
+
+Objects are immutable, so methods on Config which transform the 
+configuration return a new `Config`. 
+There is no complex tree of `Config` objects. Just `Config`. 
+It is pretty simple to use and understand.
+
+  
 ## Java interface for Konf is Config.
-
 
 The Java interface for Konf is Config.
 You can get a sub Config from Config (`getConfig(path)`).
