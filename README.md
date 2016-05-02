@@ -40,7 +40,7 @@ libraryDependencies += "io.advantageous.konf" % "konf" % "1.3.0.RELEASE"
 
 Here is an example config for JavaScript. 
 
-Konf expects the conf variable to be set to a JavaScript object with 
+Konf expects the `config` variable to be set to a JavaScript object with 
 properties.
 
 #### JavaScript based configuration for Java
