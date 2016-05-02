@@ -66,6 +66,9 @@ var config = {
   badInt2: yes,
   badDuration: "crap",
   badDuration2: "abc seconds",
-  durationMillis: 123
+  durationMillis: 123,
+  diskSpace : " 10 gigabytes",
+  diskVolumes : [" 10 gigabytes", "10GB", "10 gigabytes", 10]
+  
 };
 

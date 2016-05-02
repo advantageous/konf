@@ -41,6 +41,7 @@ class ConfigFromObject implements Config {
             DAYS, asList("days", "day", "d")
     );
 
+
     private final Set<String> TRUE = Sets.set("yes", "true", "on");
     private final Set<String> FALSE = Sets.set("no", "false", "off");
 
@@ -78,6 +79,22 @@ class ConfigFromObject implements Config {
         } else {
             throw new IllegalArgumentException("Path must resolve to a java.util.List path = " + path);
         }
+    }
+
+    @Override
+    public ConfigMemorySize getMemorySize(String path) {
+        final Object value = validatePath(path);
+        return convertObjectToMemorySize(path, value);
+    }
+
+
+    @Override
+    public List<ConfigMemorySize> getMemorySizeList(String path) {
+        final Object value = validatePath(path);
+        final Object object = extractListFromScriptObjectMirror(path, value, Object.class);
+        @SuppressWarnings("unchecked")
+        final List<Object> list = (List) object;
+        return list.stream().map(o -> convertObjectToMemorySize(path, o)).collect(Collectors.toList());
     }
 
     @Override
@@ -424,6 +441,19 @@ class ConfigFromObject implements Config {
             list.add(item);
         }
         return list;
+    }
+
+
+    private ConfigMemorySize convertObjectToMemorySize(String path, Object value) {
+        if (value instanceof CharSequence) {
+            return ConfigMemorySize.valueOf(value.toString());
+        } else if (value instanceof Number) {
+            return new ConfigMemorySize(MemorySizeUnit.BYTES, ((Number) value).longValue());
+        } else if (value instanceof ConfigMemorySize) {
+            return ((ConfigMemorySize) value);
+        }
+
+        throw new IllegalArgumentException("Path must resolve to a MemorySize path = " + path + " value = " + value);
     }
 
 

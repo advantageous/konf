@@ -445,9 +445,7 @@ having built-in functions and support for ISO-8601. See documentation
 for [duration config](https://github.com/advantageous/konf/wiki/Working-with-Durations)
 for more details.
 
-##### 
-
-Konf can reads list of numbers. 
+##### Konf can reads list of numbers. 
 
 * `getIntList` reads list of ints
 * `getLongList` reads list of longs
@@ -457,6 +455,28 @@ Konf can reads list of numbers.
 See documentation [list of number configuration](https://github.com/advantageous/konf/wiki/Working-with-lists-of-ints,-longs,-doubles,) 
 for more details.
 
+#### Konf can read memory sizes
+
+* `getMemorySize(path)` 
+* `getMemorySizeList(path)`
+
+
+
+This means we support config like:
+
+#### Sizes supported.
+```javascript
+
+  diskSpace : " 10 gigabytes",
+  diskVolumes : [" 10 gigabytes", "10GB", "10 gigabytes", 10]
+```
+
+We support the following size Strings. 
+
+#### Supported size strings
+```java
+
+```
 
 #### Thanks
 

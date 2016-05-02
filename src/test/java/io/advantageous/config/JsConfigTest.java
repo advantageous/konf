@@ -279,6 +279,23 @@ public class JsConfigTest {
     }
 
 
+    @Test
+    public void memorySize() {
+
+        final ConfigMemorySize diskSpace = config.getMemorySize("diskSpace");
+        assertEquals(ConfigMemorySize.valueOf("10GB"), diskSpace);
+    }
+
+
+    @Test
+    public void memorySizes() {
+        final List<ConfigMemorySize> diskVolumes = config.getMemorySizeList("diskVolumes");
+        assertEquals(ConfigMemorySize.valueOf("10GB"), diskVolumes.get(0));
+        assertEquals(ConfigMemorySize.valueOf("10GB"), diskVolumes.get(1));
+        assertEquals(ConfigMemorySize.valueOf("10GB"), diskVolumes.get(2));
+        assertEquals(ConfigMemorySize.valueOf("10B"), diskVolumes.get(3));
+    }
+
     //
     @SuppressWarnings("unused")
     private static class Employee {

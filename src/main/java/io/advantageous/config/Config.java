@@ -14,6 +14,23 @@ import java.util.Map;
 public interface Config {
 
 
+
+    /**
+     * Get a ConfigMemorySize  at location
+     *
+     * @param path path
+     * @return string at location.
+     */
+    ConfigMemorySize getMemorySize(String path);
+
+    /**
+     * Get a ConfigMemorySize  list at location
+     *
+     * @param path path
+     * @return string at location.
+     */
+    List<ConfigMemorySize > getMemorySizeList(String path);
+
     /**
      * Get a URI at location
      *
@@ -23,10 +40,10 @@ public interface Config {
     URI getUri(String path);
 
     /**
-     * Get a URI at location
+     * Get a list of URI at location
      *
      * @param path path
-     * @return string at location./
+     * @return string at location.
      */
     List<URI> getUriList(String path);
 
