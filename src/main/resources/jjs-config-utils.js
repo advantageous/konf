@@ -2,8 +2,16 @@ var env = Java.type("java.lang.System").getenv;
 var uri = Java.type("java.net.URI").create;
 var system = Java.type("java.lang.System");
 var duration = Java.type("java.time.Duration");
-var load = Java.type("io.advantageous.config.ConfigLoader.load");
-var configs = Java.type("io.advantageous.config.ConfigLoader.configWithFallbacks");
+var loader = Java.type("io.advantageous.config.ConfigLoader");
+
+
+function load(resources) {
+  loader.load(resources);
+}
+
+function configs(resources) {
+  loader.configWithFallbacks(resources);
+}
 
 var yes = true;
 var on = true;
@@ -13,7 +21,7 @@ var off = false;
 /** To store private vars. */
 var konf = {
   osNameInternal: system.getProperty("os.name").toLowerCase(),
-  memorySize : Java.type("io.advantageous.config.MemorySizeUnit")
+  memorySize: Java.type("io.advantageous.config.MemorySizeUnit")
 };
 
 function kilobytes(units) {

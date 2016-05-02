@@ -3,12 +3,20 @@ package io.advantageous.config;
 /**
  * An immutable class representing an amount of memory.
  */
+@SuppressWarnings("WeakerAccess")
 public class ConfigMemorySize {
 
     private final MemorySizeUnit memorySizeUnit;
     private final long amount;
 
-    ConfigMemorySize(MemorySizeUnit memorySizeUnit, long amount) {
+    /**
+     * Used to create an instance of ConfigMemorySize.
+     * Must be public used by TypeSafe config wrapper.
+     *
+     * @param memorySizeUnit memorySizeUnit
+     * @param amount amount
+     */
+    public ConfigMemorySize(MemorySizeUnit memorySizeUnit, long amount) {
         this.memorySizeUnit = memorySizeUnit;
         this.amount = amount;
     }
