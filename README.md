@@ -101,9 +101,12 @@ Overview
 * extensive test coverage
 
 This library limits itself to config. 
-If you want to load config from a database or something, you would need 
-to write some custom code. The library has nice support for merging 
-configurations so if you build one from a custom source it's easy to merge it in.
+If you want to load config from another source, e.g., database or Redis or MongoDB, 
+then you would need to write some custom code. The library has nice support for merging 
+configurations (Configs with fall-backs) so if you build a custom Config
+ from a custom source it's easy to merge it in. Just implement Config and then use 
+ `config(config...)` to configure your config into a chain of other configs. 
+ This is described at length below see "Loading config files with fallbacks".
 
 ##  License
 
@@ -185,13 +188,14 @@ You can also use:
 * `getUriList(path)` useful for connecting to downstream services
 
 
-`getMap` works with JavaScript objects. `getStringList` and `getConfigList` works
+The `getMap` works with JavaScript objects (or Java maps see below for loading config from Java objects, YAML or JSON). 
+The `getStringList` and `getConfigList` works
 with JavaScript array of string and a JavaScript array of JavaScript objects. 
 
-Not you get an exception if the `path` requested is not found. 
+Note you get an exception if the `path` requested is not found. 
 Use `hasPath(path)` if you think the config path might be missing. 
 
-Here is the full interface.
+Here is partial glimpse at the `Config` interface.
 
 #### Config interface
 ```java
@@ -313,7 +317,7 @@ First we load the config.
     }
 ```
 
-Note that `ConfigLoader.load` takes a variable length string array.
+Note that `ConfigLoader.load(resources...)` takes a variable length string array.
 By default a resource String can contain a valid URI, which 
 can have the scheme `classpath`, `file`, or `http`. If you do not specify
 a scheme than the path is assumed to be a classpath resource. 
