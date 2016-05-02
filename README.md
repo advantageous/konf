@@ -86,8 +86,6 @@ a local developers box).
 
 ## Overview
 
-Overview
-
 * implemented in plain Java SDK almost no dependencies (sl4j, and reflekt with no others)
 * supports files in : YAML, JSON, JSON LAX, JavaScript, Java properties or any tree of Map/List basic types and POJOs
 * allows you to easily create your own config DSL
