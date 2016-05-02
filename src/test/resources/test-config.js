@@ -70,7 +70,7 @@ var config = {
   badDuration2: "abc seconds",
   durationMillis: 123,
   diskSpace: " 10 gigabytes",
-  diskVolumes: [" 10 gigabytes", "10GB", "10 gigabytes", 10]
+  diskVolumes: [" 10 gigabytes", "10GB", "10 gigabytes", 10, kilobytes(10), megabytes(10), bytes(10), gigabytes(10)]
 
 };
 

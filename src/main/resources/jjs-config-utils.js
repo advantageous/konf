@@ -3,6 +3,7 @@ var uri = Java.type("java.net.URI").create;
 var system = Java.type("java.lang.System");
 var duration = Java.type("java.time.Duration");
 
+
 var yes = true;
 var on = true;
 var no = false;
@@ -10,8 +11,26 @@ var off = false;
 
 /** To store private vars. */
 var konf = {
-  osNameInternal: system.getProperty("os.name").toLowerCase()
+  osNameInternal: system.getProperty("os.name").toLowerCase(),
+  memorySize : Java.type("io.advantageous.config.MemorySizeUnit")
 };
+
+function kilobytes(units) {
+  return konf.memorySize.kilobytes(units);
+}
+
+function megabytes(units) {
+  return konf.memorySize.megabytes(units);
+}
+
+function bytes(units) {
+  return konf.memorySize.bytes(units);
+}
+
+function gigabytes(units) {
+  return konf.memorySize.gigabytes(units);
+}
+
 
 function dockerHostOrDefault(defaultHost) {
   var dockerHost = env("DOCKER_HOST");

@@ -79,6 +79,22 @@ public enum MemorySizeUnit {
         return sizeNameToSizeMap.get(sizeTypeStr.trim());
     }
 
+    public static ConfigMemorySize kilobytes(long units) {
+        return new ConfigMemorySize(KILO_BYTES, units);
+    }
+
+    public static ConfigMemorySize bytes(long units) {
+        return new ConfigMemorySize(BYTES, units);
+    }
+
+    public static ConfigMemorySize megabytes(long units) {
+        return new ConfigMemorySize(MEGA_BYTES, units);
+    }
+
+    public static ConfigMemorySize gigabytes(long units) {
+        return new ConfigMemorySize(GIGA_BYTES, units);
+    }
+
     public Set<String> getSizeNames() {
         return sizes;
     }

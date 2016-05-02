@@ -489,6 +489,14 @@ public enum MemorySizeUnit {
     
 ```
 
+You can also specify the sizes with built-in functions if you don't
+want to use strings.
+
+#### Using built-in functions to create sizes.
+```javascript
+  diskVolumes: [kilobytes(10), megabytes(10), bytes(10), gigabytes(10)]
+```
+
 ## Loading config files with fallbacks
 
 #### 
