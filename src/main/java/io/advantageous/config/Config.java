@@ -11,6 +11,7 @@ import java.util.Map;
  * @author Rick Hightower
  * @author Geoff Chandler
  */
+@SuppressWarnings("WeakerAccess")
 public interface Config {
 
 

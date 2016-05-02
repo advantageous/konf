@@ -4,13 +4,13 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.*;
-import java.net.URI;
-import java.net.URL;
+import static io.advantageous.config.ResourceUtils.findResource;
 
 /**
  * Javascript configuration loader.
  *
  * @author Geoff Chandler geoffc@gmail.com
+ * @author Rick Hightower
  */
 @SuppressWarnings("WeakerAccess")
 public class ConfigLoader {
@@ -98,47 +98,5 @@ public class ConfigLoader {
         }
     }
 
-    private static InputStream findResource(final String resourceName) {
-        InputStream resourceAsStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceName);
-        if (resourceAsStream == null) {
-            resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
-        }
-
-        if (resourceAsStream == null) {
-            final URI uri = URI.create(resourceName);
-            if (uri.getScheme().equals("file")) {
-                try {
-                    final String path = uri.getPath();
-                    resourceAsStream = new FileInputStream(new File(path));
-                } catch (FileNotFoundException e) {
-                    throw new IllegalArgumentException("File resource could not be loaded " + resourceName);
-                }
-            } else if (uri.getScheme().equals("http")) {
-                try {
-                    URL url = uri.toURL();
-                    resourceAsStream = url.openStream();
-                } catch (Exception e) {
-                    throw new IllegalArgumentException("Web resource could not be loaded " + resourceName);
-                }
-            } else if (uri.getScheme().equals("classpath")) {
-                String path = uri.getSchemeSpecificPart();
-                if (path.startsWith("//")) {
-                    path = path.substring(2);
-                } else if (path.startsWith("/")) {
-                    path = path.substring(1);
-                }
-                resourceAsStream = ConfigLoader.class.getClassLoader().getResourceAsStream(path);
-                if (resourceAsStream == null) {
-                    resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-                }
-            }
-        }
-
-        if (resourceAsStream == null) {
-            throw new IllegalArgumentException("resources could not be loaded " + resourceName);
-        }
-
-        return resourceAsStream;
-    }
 
 }

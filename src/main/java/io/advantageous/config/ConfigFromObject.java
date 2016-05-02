@@ -422,25 +422,32 @@ class ConfigFromObject implements Config {
 
     @SuppressWarnings("unchecked")
     private Object extractListFromScriptObjectMirror(final String path, final Object value, final Class<?> typeCheck) {
-        final ScriptObjectMirror mirror = ((ScriptObjectMirror) value);
-        if (!mirror.isArray()) {
+
+        if (value instanceof ScriptObjectMirror) {
+            final ScriptObjectMirror mirror = ((ScriptObjectMirror) value);
+            if (!mirror.isArray()) {
+                throw new IllegalArgumentException("Path must resolve to a JS array or java.util.List path = " + path);
+            }
+            List<Object> list = new ArrayList(mirror.size());
+            for (int index = 0; index < mirror.size(); index++) {
+                final Object item = mirror.getSlot(index);
+
+                if (item == null) {
+                    throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
+                            + " issue at index " + index + " but item is null path is " + path);
+                }
+                if (!typeCheck.isAssignableFrom(item.getClass())) {
+                    throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
+                            + " issue at index " + index + "but item is " + item.getClass().getName() + " path is " + path);
+                }
+                list.add(item);
+            }
+            return list;
+        } else if (value instanceof List) {
+            return value;
+        } else {
             throw new IllegalArgumentException("Path must resolve to a JS array or java.util.List path = " + path);
         }
-        List<Object> list = new ArrayList(mirror.size());
-        for (int index = 0; index < mirror.size(); index++) {
-            final Object item = mirror.getSlot(index);
-
-            if (item == null) {
-                throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
-                        + " issue at index " + index + " but item is null path is " + path);
-            }
-            if (!typeCheck.isAssignableFrom(item.getClass())) {
-                throw new IllegalArgumentException("Path must resolve to a list of " + typeCheck.getName()
-                        + " issue at index " + index + "but item is " + item.getClass().getName() + " path is " + path);
-            }
-            list.add(item);
-        }
-        return list;
     }
 
 
