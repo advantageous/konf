@@ -13,6 +13,7 @@ import java.time.Duration;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static io.advantageous.boon.core.Maps.map;
@@ -222,16 +223,23 @@ class ConfigFromObject implements Config {
         Object value = validatePath(path);
         if (value instanceof ScriptObjectMirror) {
             value = extractListFromScriptObjectMirror(path, value, Number.class);
-        } else if (value instanceof List) {
-            ((List) value).stream().forEach(o -> {
-                if (!(o instanceof Number)) {
-                    throw new IllegalArgumentException("Path must equate to list with Numbers," +
+        }
+
+        if (value instanceof List) {
+
+            List<Object> list = (List<Object>) value;
+            return list.stream().filter(o -> {
+                if (!(o instanceof Number || o instanceof CharSequence)) {
+                    throw new IllegalArgumentException("Path must equate to list with Numbers or Strings" +
+                            " that can be parsed to numbers," +
                             " but found type " + (o == null ? null : o.getClass().getName()));
                 }
-            });
+                return true;
+            }).map(o->convertObjectToNumber(path, o)).collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("Path must equate to list with Numbers or Strings" +
+                    " that can be parsed to numbers");
         }
-        //noinspection ConstantConditions
-        return (List<Number>) value;
     }
 
 
@@ -322,8 +330,11 @@ class ConfigFromObject implements Config {
     }
 
     private Number validateNumberInPath(String path) {
-        Object object = findProperty(root, path);
+        final Object object = findProperty(root, path);
+        return convertObjectToNumber(path, object);
+    }
 
+    private Number convertObjectToNumber(String path, Object object) {
         if (object == null) {
             throw new IllegalArgumentException("Path or property " + path + " does not exist");
         }
@@ -343,7 +354,6 @@ class ConfigFromObject implements Config {
 
         throw new IllegalArgumentException("Path or property " + path + " exists but is not a number value ="
                 + object);
-
     }
 
     private Duration convertStringToDuration(final String path, final Object value) {

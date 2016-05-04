@@ -42,7 +42,7 @@ public class ConfigImplTest {
                 "longs", asList(1.0, 2.0, 3.0),
                 "ints", asList(1, 2, 3),
                 "intsNull", asList(1, null, 3),
-                "intsWrongType", asList(1, "2", 3)
+                "intsWrongType", asList(1, true, 3)
         );
         config = new ConfigFromObject(map);
     }
