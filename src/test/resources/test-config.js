@@ -1,6 +1,6 @@
 var config = {
 
-  abc : "abc",
+  abc: "abc",
 
   myUri: uri("http://host:9000/path?foo=bar"),
 

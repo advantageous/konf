@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
-/** Used by sub-projects to find resources. */
+/**
+ * Used by sub-projects to find resources.
+ */
 @SuppressWarnings("WeakerAccess")
 public class ResourceUtils {
 

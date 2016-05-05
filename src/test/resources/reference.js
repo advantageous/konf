@@ -1,4 +1,4 @@
 var config = {
-  abc : "abcFallback",
-  def : "def"
+  abc: "abcFallback",
+  def: "def"
 }

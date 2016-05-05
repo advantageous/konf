@@ -13,7 +13,6 @@ import java.time.Duration;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static io.advantageous.boon.core.Maps.map;
@@ -235,7 +234,7 @@ class ConfigFromObject implements Config {
                             " but found type " + (o == null ? null : o.getClass().getName()));
                 }
                 return true;
-            }).map(o->convertObjectToNumber(path, o)).collect(Collectors.toList());
+            }).map(o -> convertObjectToNumber(path, o)).collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("Path must equate to list with Numbers or Strings" +
                     " that can be parsed to numbers");

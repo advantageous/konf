@@ -44,7 +44,7 @@ class Configs implements Config {
 
     @Override
     public String getString(String path) {
-       return findConfig(path).getString(path);
+        return findConfig(path).getString(path);
     }
 
     @Override

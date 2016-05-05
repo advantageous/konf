@@ -3,7 +3,9 @@ package io.advantageous.config;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import static io.advantageous.config.ResourceUtils.findResource;
 
 /**
@@ -35,9 +37,9 @@ public class ConfigLoader {
 
     /**
      * Creates a chain of configs.
+     *
      * @param configs var args of configs. Searched from left to right so that the
      *                left side overrides the right side.
-     *
      * @return chain of configs as a single config. Left side is most significant.
      */
     public static Config configWithFallbacks(final Config[] configs) {
@@ -47,9 +49,9 @@ public class ConfigLoader {
     /**
      * Alias for `configWithFallbacks`.
      * Creates a chain of configs.
+     *
      * @param configs var args of configs. Searched from left to right so that the
      *                left side overrides the right side.
-     *
      * @return chain of configs as a single config. Left side is most significant.
      */
     public static Config configs(final Config... configs) {

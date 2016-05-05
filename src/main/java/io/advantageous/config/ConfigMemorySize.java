@@ -14,7 +14,7 @@ public class ConfigMemorySize {
      * Must be public used by TypeSafe config wrapper.
      *
      * @param memorySizeUnit memorySizeUnit
-     * @param amount amount
+     * @param amount         amount
      */
     public ConfigMemorySize(MemorySizeUnit memorySizeUnit, long amount) {
         this.memorySizeUnit = memorySizeUnit;
