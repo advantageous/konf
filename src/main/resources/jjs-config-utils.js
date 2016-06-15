@@ -98,22 +98,5 @@ function isSolaris() {
 }
 
 function shell(command) {
-  var StringBuffer = Java.type("java.lang.StringBuffer");
-  var Runtime = Java.type("java.lang.Runtime");
-  var BufferedReader = Java.type("java.io.BufferedReader");
-  var InputStreamReader = Java.type("java.io.InputStreamReader");
-  var output = new StringBuffer();
-  var p;
-  try {
-    p = Runtime.getRuntime().exec(command);
-    p.waitFor();
-    var reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-    var line;
-    while ((line = reader.readLine()) != null) {
-      output.append(line + "\n");
-    }
-  } catch (e) {
-    throw new Error(e);
-  }
-  return output.toString();
+  return Java.type('io.advantageous.boon.Runner').run(command);
 }

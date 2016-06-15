@@ -17,7 +17,7 @@
  */
 
 group 'io.advantageous.konf'
-version '1.3.7'
+version '1.3.8'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -39,7 +39,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.14'
-    compile 'io.advantageous.boon:boon-reflekt:0.5.7'
+    compile 'io.advantageous.boon:boon-util:0.5.7'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
