@@ -313,4 +313,8 @@ public class JsConfigTest {
         private String name;
     }
 
+    @Test
+    public void testRunCommand() {
+        assertNotNull(config.getString("ls"));
+    }
 }

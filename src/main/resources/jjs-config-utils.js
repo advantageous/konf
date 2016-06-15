@@ -4,7 +4,6 @@ var system = Java.type("java.lang.System");
 var duration = Java.type("java.time.Duration");
 var loader = Java.type("io.advantageous.config.ConfigLoader");
 
-
 function load(resources) {
   loader.load(resources);
 }
@@ -40,7 +39,6 @@ function gigabytes(units) {
   return konf.memorySize.gigabytes(units);
 }
 
-
 function dockerHostOrDefault(defaultHost) {
   var dockerHost = env("DOCKER_HOST");
   return dockerHost ? uri(dockerHost).getHost() : defaultHost;
@@ -62,11 +60,9 @@ function days(unit) {
   return duration.ofDays(unit);
 }
 
-
 function millis(unit) {
   return duration.ofMillis(unit);
 }
-
 
 function milliseconds(unit) {
   return duration.ofMillis(unit);
@@ -93,12 +89,31 @@ function isUnix() {
   return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
 }
 
-
 function isLinux() {
   return konf.osNameInternal.indexOf("linux") >= 0;
 }
 
-
 function isSolaris() {
   return (konf.osNameInternal.indexOf("sunos") >= 0);
+}
+
+function shell(command) {
+  var StringBuffer = Java.type("java.lang.StringBuffer");
+  var Runtime = Java.type("java.lang.Runtime");
+  var BufferedReader = Java.type("java.io.BufferedReader");
+  var InputStreamReader = Java.type("java.io.InputStreamReader");
+  var output = new StringBuffer();
+  var p;
+  try {
+    p = Runtime.getRuntime().exec(command);
+    p.waitFor();
+    var reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+    var line;
+    while ((line = reader.readLine()) != null) {
+      output.append(line + "\n");
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+  return output.toString();
 }
